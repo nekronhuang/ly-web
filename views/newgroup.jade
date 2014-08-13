@@ -1,0 +1,6 @@
+a.text-center(href='' ng-show='!newgroup.input' ng-click='newgroup.input=true') 新建
+a.form-inline(ng-show='newgroup.input')
+    .form-group
+        input.col-sm-2.form-control.input-sm(type='text' name='group' ng-model='newgroup.newValue')
+    button.btn.btn-primary.btn-sm.confirm(ng-click='newgroup.confirm()') 确认
+    button.btn.btn-default.btn-sm.cancel(ng-if='!newgroup.hideCancel' ng-click='newgroup.cancel()') 取消

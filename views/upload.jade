@@ -1,0 +1,103 @@
+.sb-column.center#sb-contacts-upload
+    .header
+        ul.nav.nav-pills.nav-justified
+            li(ng-class='{active:step==1}')
+                a(ng-href='/contacts/upload') 导入文件
+            li(ng-class='{active:step==2}')
+                a 文件确认
+            li(ng-class='{active:step==3}')
+                a 导入完成
+    .main
+        .step1.container-fluid(ng-show='step==1')
+            form(enctype='multipart/form-data')
+                .row
+                    .col-sm-8.col-sm-offset-2
+                        .margin
+                            table.table
+                                thead
+                                    tr
+                                        th(width='70%') 文件名
+                                        th 文件大小
+                                tbody
+                                    tr(ng-repeat='item in uploader.queue')
+                                        th {{item.file.name}}
+                                        th {{item.file.size/1024|number:2}} KB
+                        .margin
+                            span.btn.btn-success.file-input
+                                span.glyphicon.glyphicon-plus
+                                span 添加文件
+                                input(type='file' ng-file-select ng-click="uploader.clearQueue()" multiple)
+                            button.btn.btn-primary.start(type='button' ng-click='uploader.uploadAll()' ng-disabled='!uploader.getNotUploadedItems().length')
+                                span.glyphicon.glyphicon-ok
+                                span 开始上传
+                            button.btn.btn-warning.cancel(type='button' ng-click='uploader.cancelAll()' ng-disabled='!uploader.isUploading')
+                                span.glyphicon.glyphicon-remove
+                                span 停止上传
+                        .margin
+                            | 上传进度:
+                            .progress.progress-striped.active
+                                .progress-bar(ng-style='{"width":uploader.progress+"%"}')
+                        .margin
+                            .panel.panel-default
+                                .panel-heading
+                                    h4 导入需知
+                                .panel-body
+                                    ul
+                                        li 支持导入CSV或者EXCEL格式（xls，xlsx，xlsm，xlsb）的文件
+                                        li
+                                            | 文件最大不超过&nbsp;
+                                            strong 5MB
+                                        li
+                                            | 下载
+                                            a 示例模板
+        .step2.container-fluid(ng-show='step==2')
+            .row
+                .col-sm-8.col-sm-offset-2
+                    .margin
+                        .container-fluid
+                            .row
+                                .col-sm-4
+                                    span 群组：&nbsp;&nbsp;
+                                    span.dropdown.sb-group(dropdown)
+                                        button.btn.btn-primary.btn-sm.dropdown-toggle(dropdown-toggle)
+                                            | {{group.display.length?group.display:'请选择'}}
+                                            span.caret
+                                        button.btn.btn-danger.btn-sm(ng-click='group=null') &times;
+                                        ul.dropdown-menu(ng-nicescroll ns-options='{horizrailenabled:false}')
+                                            li(ng-if='user.groups.length==0')
+                                                a 无
+                                            li(ng-repeat='g in user.groups')
+                                                a(href='#' ng-click='$parent.$parent.group=g') {{g.display}}
+                                            li.new-group(ng-newgroup ng-init='newgroup={input:false,key:"contactGroups"}')
+                    .margin
+                        .sb-table.dhead.container-fluid
+                            .row
+                                .col-sm-2.text-center 表头
+                                .col-sm-8.text-center 内容
+                                .col-sm-2.text-center 对应项
+                        .sb-table.dbody.container-fluid(ng-nicescroll ns-options='{horizrailenabled:false}')
+                            .row(ng-repeat='item in mapping.header' ng-class='{active:item.key.length>0}' style='line-height:34px;')
+                                .col-sm-2.text-center.overflow {{item.display}}
+                                .col-sm-8.text-center.overflow {{item.value}}
+                                .col-sm-2.text-center.overflow
+                                    select.form-control(ng-model='item.key' ng-mapping-watcher)
+                                        option(value='') ————
+                                        option(ng-repeat='option in sys.options' ng-value='option.key' ng-disabled='option.disabled') {{option.label}}
+                        p.help-block *未选择对应项的列将不存入数据库
+                        p.help-block *支持自定义列，至多3列
+                    .margin
+                        button.btn.btn-warning(type='button' ng-click='prevStep()')
+                            i.icon-remove.icon-white
+                            span 上一步
+                        button.btn.btn-primary(type='button' ng-click='sys.mappingConfirm()' ng-disabled='sys.mappingCheck()')
+                            i.icon-ok.icon-white
+                            span 确认上传
+        .step3.container-fluid(ng-show='step==3')
+            .row
+                .col-sm-8.col-sm-offset-2
+                    .margin
+                        | 上传完成
+                        button.btn.btn-primary(type='button')
+                            span 开始管理
+                        button.btn.btn-primary(type='button')
+                            span 继续上传
