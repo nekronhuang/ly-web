@@ -1,0 +1,26 @@
+{
+    "name": "lianyun",
+    "version": "3.0.0",
+    "dependencies": {
+        "express": "*",
+        "morgan": "*",
+        "jade": "*",
+        "serve-favicon": "*",
+        "cookie-parser": "*",
+        "cookie-signature": "*",
+        "express-session": "*",
+        "compression": "*",
+        "errorhandler": "*",
+        "csurf": "*",
+        "body-parser": "*",
+        "connect-multiparty": "*",
+        "method-override": "*",
+        "mongodb": "*",
+        "connect-mongo": "*",
+        "async": "*",
+        "iconv-lite": "*",
+        "jpush": "*",
+        "nodemailer": "*",
+        "j": "*"
+    }
+}

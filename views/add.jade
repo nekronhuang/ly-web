@@ -1,0 +1,63 @@
+.sb-column.center#sb-contacts-add
+    .header
+            h1
+                | {{newContact.name||'姓 名'}}
+                small(ng-show='newContact.gender=="男"') 先生
+                small(ng-show='newContact.gender=="女"') 女士
+    .main
+        .left(ng-nicescroll ns-options='{horizrailenabled:false}')
+            div
+                .input-group
+                    span.input-group-addon 姓名
+                    input.form-control(ng-model='newContact.name' ng-init='newContact.name=""')
+            div
+                .input-group
+                    span.input-group-addon 性别
+                    select.form-control(ng-model='newContact.gender' ng-init='newContact.gender=""')
+                        option
+                        option 男
+                        option 女
+            div(ng-repeat='input in basicInfoInput')
+                .input-group
+                    span.input-group-addon {{input.display}}
+                    input.form-control(ng-model='newContact[input.value]' ng-init='newContact[input.value]=""')
+        .right(ng-nicescroll ns-options='{horizrailenabled:false}')
+            div
+                .input-group
+                    span 群组：&nbsp;&nbsp;
+                    span.dropdown.sb-group(dropdown)
+                        button.btn.btn-primary.btn-sm.dropdown-toggle(dropdown-toggle)
+                            | {{$parent.group.display.length?$parent.group.display:'请选择'}}
+                            span.caret
+                        button.btn.btn-danger.btn-sm(ng-click='$parent.group=null') &times;
+                        ul.dropdown-menu(ng-nicescroll)
+                            li(ng-if='user.groups.length==0')
+                                a 无
+                            li(ng-repeat='g in user.groups')
+                                a(href='#' ng-click='$parent.$parent.$parent.group=g') {{g.display}}
+                            li.divider
+                            li.new-group(ng-newgroup  ng-init='newgroup={input:false,key:"contactGroups"}')
+            div(ng-repeat='multi in advancedInfoInput' ng-init='newContact[multi.value]=[""]')
+                .input-group(ng-repeat='input in newContact[multi.value] track by $index')
+                    span.input-group-addon {{multi.display}}
+                    input.form-control(ng-model='newContact[multi.value][$index]')
+                    span.input-group-addon.border-left-none(ng-click='advance.plus(multi.value)')
+                        span.glyphicon.glyphicon-plus
+                    span.input-group-addon(ng-click='advance.minus(multi.value,$index)')
+                        span.glyphicon.glyphicon-minus
+            div
+                .input-group(style='max-width:304px;')
+                    span.input-group-addon 邮箱
+                    input.form-control(ng-model='newContact.email' ng-init='newContact.email=""')
+            div
+                .input-group(style='max-width:304px;')
+                    span.input-group-addon(style='padding: 6px 15px;') QQ
+                    input.form-control(ng-model='newContact.qq' ng-init='newContact.qq=""')
+            div
+                .input-group(style='max-width:304px;')
+                    span.input-group-addon 备注
+                    input.form-control(ng-model='newNote.content' ng-init='newNote.content=""')
+    .footer
+        button.btn.btn-primary.confirm(ng-click='addNewContact()')
+            | 完成创建
+

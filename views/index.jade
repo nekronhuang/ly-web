@@ -1,0 +1,8 @@
+form(name='reg' novalidate method='post' action='app/sign/signup')
+    input(name='email' type='email' placeholder='email' required)
+    input(name='password' type='password' placeholder='password' required)
+    button(type='submit') 注册
+form(name='login' novalidate method='post' action='app/sign/login')
+    input(name='email' type='email' placeholder='email' required)
+    input(name='password' type='password' placeholder='password' required)
+    button(type='submit' ng-click='login(user)') 登录
