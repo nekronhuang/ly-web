@@ -2,6 +2,7 @@ var crypto = require('crypto'),
     mongo = require('mongodb'),
     async = require('async'),
     mail = require('../tools/mail'),
+    config =require('../config'),
     userProxy = require('../proxy/user');
 
 exports.signup = function (req, res) {
@@ -173,7 +174,7 @@ exports.logout = function (req, res) {
 exports.active = function (req, res) {
     //res.charset='utf-8';
     if (req.query.q) {
-        var decipher = crypto.createDecipher('aes192', 'lxxlxx9179'),
+        var decipher = crypto.createDecipher('aes192', config.secretKey),
             query = req.query.q;
         query = decipher.update(query, 'hex', 'utf8');
         query += decipher.final('utf8');
