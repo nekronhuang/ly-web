@@ -29,6 +29,30 @@ exports.getContactsByGroup = function() {
     models.Contact.find(query, filter).toArray(callback);
 }
 
+exports.getContactsByTag = function() {
+    var filter = {
+            createAt: 0,
+            updateAt: 0,
+            copyFrom: 0,
+            belongTo: 0,
+            group: 0
+        },
+        masterId = Array.prototype.shift.apply(arguments),
+        tagName = Array.prototype.shift.apply(arguments),
+        callback = Array.prototype.pop.apply(arguments),
+        condition = arguments.length ? arguments[0] : null,
+        query={};
+    query.belongTo=new mongo.ObjectID(masterId);
+    query.tags=tagName;
+    if(condition){
+        for(var key in condition){
+            var val=condition[key];
+            query[key]=new RegExp(val);
+        }
+    }
+    models.Contact.find(query, filter).toArray(callback);
+}
+
 exports.insertContact = function(newContact, callback) {
     models.Contact.insert(newContact, callback);
 }

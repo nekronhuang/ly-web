@@ -9,6 +9,9 @@
     ul.group-custom(ng-nicescroll ns-options='{horizrailenabled:false}')
         li
             ul
+                li(ng-repeat='group in groups.default' ng-click='changeGroup(null,group.display)' ng-class='{active:activeGroup.display==group.display}')
+                    span.text {{group.display}}
+                    span.badge.bg-primary.pull-right {{group.number}}
                 li(ng-repeat='group in groups.custom' ng-click='changeGroup(group.groupId,group.display)' ng-class='{active:activeGroup.display==group.display}')
                     span.text {{group.display}}
                     span.badge.bg-primary.pull-right {{group.number}}

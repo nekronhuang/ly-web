@@ -293,6 +293,7 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
             $scope.groups = {
                 total: sbInfo.info.groupStatus.contact.total,
                 ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
+                default:sbInfo.info.tags,
                 custom: sbInfo.info.contactGroups,
             };
             $scope.myColumnDefs = sbInfo.info.settings.columnDefs;
@@ -303,6 +304,7 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                 $scope.groups = {
                     total: sbInfo.info.groupStatus.contact.total,
                     ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
+                    default:sbInfo.info.tags,
                     custom: sbInfo.info.contactGroups,
                 };
                 $scope.myColumnDefs = sbInfo.info.settings.columnDefs;
@@ -331,6 +333,12 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                     display: name,
                     groupId: null
                 };
+                $http.get('/data/contacts/tag/' + name).success(function (res) {
+                    $scope.myData = res.data;
+                    $scope.gridOptions.selectAll(false);
+                }).error(function () {
+
+                });
             }
         };
         $scope.downloadList=function(){
@@ -374,6 +382,7 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                 $scope.groups = {
                     total: sbInfo.info.groupStatus.contact.total,
                     ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
+                    default:sbInfo.info.tags,
                     custom: sbInfo.info.contactGroups,
                 };
             }).error(function () {
@@ -395,22 +404,25 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                 var item = $scope.mySelections[i];
                 contactIds.push(item._id);
             }
-            $http.put('/data/contacts/multiedit/' + contactIds.join(','), post).success(function (res) {
-                if ($scope.activeGroup.groupId&&$scope.activeGroup.groupId != 'total') {
-                    for (var i = 0, len = $scope.mySelections.length; i < len; i++) {
-                        var index = $scope.myData.indexOf($scope.mySelections[i]);
-                        $scope.myData.splice(index, 1);
+            if(postGroup.groupId!=$scope.activeGroup.groupId){
+                $http.put('/data/contacts/multiedit/' + contactIds.join(','), post).success(function (res) {
+                    if ($scope.activeGroup.groupId&&$scope.activeGroup.groupId != 'total') {
+                        for (var i = 0, len = $scope.mySelections.length; i < len; i++) {
+                            var index = $scope.myData.indexOf($scope.mySelections[i]);
+                            $scope.myData.splice(index, 1);
+                        }
                     }
-                }
-                sbInfo.info = res.info;
-                $scope.groups = {
-                    total: sbInfo.info.groupStatus.contact.total,
-                    ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
-                    custom: sbInfo.info.contactGroups,
-                };
-            }).error(function () {
+                    sbInfo.info = res.info;
+                    $scope.groups = {
+                        total: sbInfo.info.groupStatus.contact.total,
+                        ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
+                        default:sbInfo.info.tags,
+                        custom: sbInfo.info.contactGroups,
+                    };
+                }).error(function () {
 
-            });
+                });
+            }
         }
         $scope.openCustomModal = function (size) {
             var modalInstance = $modal.open({
@@ -480,16 +492,20 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
             }
         };
         $scope.confirmFilter = function () {
+            var url;
             if($scope.activeGroup.groupId){
-                var url = '/data/contacts/group/';
+                url = '/data/contacts/group/';
                 url += $scope.activeGroup.groupId;
-                url += '?filter[' + $scope.filter.factor.key + ']=' + $scope.filter.factor.value;
-                $http.get(url).success(function (res) {
-                    $scope.myData = res.data;
-                }).error(function () {
-
-                });
+            }else{
+                url='/data/contacts/tag/';
+                url+=$scope.activeGroup.display;
             }
+            url += '?filter[' + $scope.filter.factor.key + ']=' + $scope.filter.factor.value;
+            $http.get(url).success(function (res) {
+                $scope.myData = res.data;
+            }).error(function () {
+
+            });
         };
         $scope.filter = {
             factor: {

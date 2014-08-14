@@ -1,8 +1,30 @@
-form(name='reg' novalidate method='post' action='app/sign/signup')
-    input(name='email' type='email' placeholder='email' required)
-    input(name='password' type='password' placeholder='password' required)
-    button(type='submit') 注册
-form(name='login' novalidate method='post' action='app/sign/login')
-    input(name='email' type='email' placeholder='email' required)
-    input(name='password' type='password' placeholder='password' required)
-    button(type='submit' ng-click='login(user)') 登录
+doctype html
+html
+    head
+        meta(http-equiv='content-type' content='text/html; charset=UTF-8')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge;chrome=1')
+        meta(name='keywords' content='科技,NFC,联云,斯墨,信息')
+        meta(name='description' content='领先的会展信息服务')
+        meta(name='author' content='synorme,上海斯墨信息科技有限公司')
+        title 联云
+        link(rel='shortcut icon' href='/img/favicon.ico')
+        link(rel='stylesheet' type='text/css' href='/css/bootstrap.min.css')
+        link(rel='stylesheet' type='text/css' href='/css/theme.css')
+    body
+        .container
+            div
+                form(name='reg' novalidate method='post' action='app/sign/signup')
+                    input(name='email' type='email' placeholder='email' required)
+                    input(name='password' type='password' placeholder='password' required)
+                    button(type='submit') 注册
+                form(name='login' novalidate method='post' action='app/sign/login')
+                    input(name='email' type='email' placeholder='email' required)
+                    input(name='password' type='password' placeholder='password' required)
+                    button(type='submit') 登录
+            .margin
+                svg#logo(width='84' height='84' xmlns='http://www.w3.org/2000/svg')
+                    path.line(style='stroke-width: 2;stroke: #ddd;fill:none;' d='M 80.889194,41.80541 C 80.889194,63.45198 63.341174,81 41.694594,81 20.048024,81 2.5,63.45198 2.5,41.80541 2.5,20.158827 20.048024,2.61081 41.694594,2.61081 c 21.64658,0 39.1946,17.548017 39.1946,39.1946 z')
+                .hidden(data-svg='logo' style='background:#f00;')
+        script(src='/lib/shim.min.js')
+        script(src='/lib/jquery.min.js')
+        script(src='/js/transition.js')

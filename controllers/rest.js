@@ -134,8 +134,29 @@ exports.changePwd=function(req,res){
     });
 }
 
-exports.editUser = function (req, res) {
-    userProxy.editUserById(req.session.user._id, req.body.update, function (err, result) {
+exports.pushNewGroup = function (req, res) {
+    var newGroup = {},
+        newGroupId = new mongo.ObjectID().toString();
+    newGroup[req.body.key] = req.body.value;
+    newGroup[req.body.key].groupId = newGroupId;
+    userProxy.pushNewGroup(req.session.user._id, newGroup, function (err, result) {
+        if (err) {
+            res.send(500);
+        } else {
+            res.send(newGroupId);
+        }
+    });
+}
+
+exports.deleteGroup=function(req,res){
+    async.series([
+        function(next){
+            userProxy.deleteGroup(req.session.user._id,req.params.groupId,next);
+        },
+        function(next){
+            contactProxy.deleteGroup(req.params.groupId,next);
+        }
+    ],function(err){
         if (err) {
             res.send(500);
         } else {
@@ -144,41 +165,12 @@ exports.editUser = function (req, res) {
     });
 }
 
-exports.editUsers = function (req, res) {
-    var memberIds = req.params.oids.split(','),
-        user = req.body.user;
-    async.waterfall([
-        function (next) {
-            userProxy.editUserByIds(req.session.user._id, memberIds, req.body.update, function (err, result) {
-                next(err);
-            });
-        },
-        function (next) {
-            var grouped = 0;
-            async.each(user.memberGroups, function (memberGroup, cb) {
-                userProxy.countMemberByGroup(req.session.user._id, memberGroup.groupId, function (err, count) {
-                    memberGroup.number = count;
-                    grouped += count;
-                    cb(err);
-                });
-            }, function (err) {
-                next(err, grouped);
-            });
-        },
-        function (grouped, next) {
-            userProxy.countMemberByGroup(req.session.user._id, function (err, count) {
-                user.groupStatus.member.total = count;
-                user.groupStatus.member.ungrouped = count - grouped;
-                next(err);
-            });
-        }
-    ], function (err) {
+exports.editUser = function (req, res) {
+    userProxy.editUserById(req.session.user._id, req.body.update, function (err, result) {
         if (err) {
             res.send(500);
         } else {
-            res.json({
-                info: user
-            });
+            res.send(200);
         }
     });
 }
@@ -191,6 +183,37 @@ exports.getContactsByGroup = function (req, res) {
                 contactProxy.getContactsByGroup(req.session.user._id, groupId, req.query.filter, next);
             } else {
                 contactProxy.getContactsByGroup(req.session.user._id, groupId, next);
+            }
+        },
+        function (contacts, next) {
+            async.each(contacts, function (contact, cb) {
+                noteProxy.getNotesByBelongTo(contact._id, function (err, notes) {
+                    contact.notes = notes;
+                    cb(err);
+                });
+            }, function (err) {
+                next(err, contacts);
+            });
+        }
+    ], function (err, contacts) {
+        if (err) {
+            res.send(500);
+        } else {
+            res.json({
+                data: contacts
+            });
+        }
+    });
+}
+
+exports.getContactsByTag = function (req, res) {
+    var tagName = req.params.name;
+    async.waterfall([
+        function (next) {
+            if (req.query.filter) {
+                contactProxy.getContactsByTag(req.session.user._id, tagName, req.query.filter, next);
+            } else {
+                contactProxy.getContactsByTag(req.session.user._id, tagName, next);
             }
         },
         function (contacts, next) {
@@ -229,6 +252,8 @@ exports.editContact = function (req, res) {
 exports.editContacts = function (req, res) {
     var contactIds = req.params.oids.split(','),
         user = req.body.user;
+        console.log(user.tags);
+
     async.waterfall([
         function (next) {
             contactProxy.editContactByIds(req.session.user._id, contactIds, req.body.update, function (err, result) {
@@ -279,37 +304,6 @@ exports.insertNewNote = function (req, res) {
             res.json({
                 note: notes[0]
             });
-        }
-    });
-}
-
-exports.pushNewGroup = function (req, res) {
-    var newGroup = {},
-        newGroupId = new mongo.ObjectID().toString();
-    newGroup[req.body.key] = req.body.value;
-    newGroup[req.body.key].groupId = newGroupId;
-    userProxy.pushNewGroup(req.session.user._id, newGroup, function (err, result) {
-        if (err) {
-            res.send(500);
-        } else {
-            res.send(newGroupId);
-        }
-    });
-}
-
-exports.deleteGroup=function(req,res){
-    async.series([
-        function(next){
-            userProxy.deleteGroup(req.session.user._id,req.params.groupId,next);
-        },
-        function(next){
-            contactProxy.deleteGroup(req.params.groupId,next);
-        }
-    ],function(err){
-        if (err) {
-            res.send(500);
-        } else {
-            res.send(200);
         }
     });
 }
