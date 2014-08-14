@@ -39,7 +39,7 @@ app.use(session({
     cookie: {
         maxAge: config.maxAge
     },
-    secret: config.secret,
+    secret: config.mongo.secret,
     store: new MongoStore({
         db: 'lianyun'
     }),

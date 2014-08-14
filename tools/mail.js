@@ -5,7 +5,7 @@ var crypto=require('crypto'),
     config=require('../config');
 
 exports.sendActiveMail=function(email,options,callback){
-    var cipher = crypto.createCipher('aes192', config.secretKey),
+    var cipher = crypto.createCipher('aes192', config.crypto.key),
         WEBSITE='http://www.lianyun.me',
         html=jade.renderFile('./views/mail_templates/'+options.template,options.locals);
     href = cipher.update(email, 'utf8', 'hex');
@@ -14,12 +14,12 @@ exports.sendActiveMail=function(email,options,callback){
     var transport = nodemailer.createTransport('SMTP', {
             service: 'QQ',
             auth: {
-                user: 'service@sinorvi.com',
-                pass: config.secretKey
+                user: config.mail.email,
+                pass: config.mail.password
             }
         }),
         mailOptions = {
-            from: 'service@sinorvi.com',
+            from: config.mail.email,
             to: email,
             subject: 'hello',
             html: html

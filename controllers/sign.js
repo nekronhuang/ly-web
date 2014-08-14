@@ -7,6 +7,8 @@ var crypto = require('crypto'),
 
 exports.signup = function (req, res) {
     var md5 = crypto.createHash('md5'),
+        singleTemplate='<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>',
+        multiTemplate='<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field).join("/")}}</span></a></div>',
         newUser = {
             name:'',
             email: req.body.email,
@@ -22,67 +24,67 @@ exports.signup = function (req, res) {
                     displayName: '姓名',
                     visible: true,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'gender',
                     displayName: '性别',
                     visible: false,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'field',
                     displayName: '行业',
                     visible: false,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field).join("/")}}</span></a></div>'
+                    cellTemplate: multiTemplate
                 }, {
                     field: 'mobile',
                     displayName: '手机',
                     visible: true,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field).join("/")}}</span></a></div>'
+                    cellTemplate: multiTemplate
                 }, {
                     field: 'number',
                     displayName: '电话',
                     visible: false,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field).join("/")}}</span></a></div>'
+                    cellTemplate: multiTemplate
                 }, {
                     field: 'area',
                     displayName: '地区',
                     visible: true,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'department',
                     displayName: '部门',
                     visible: false,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'position',
                     displayName: '职位',
                     visible: true,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'company',
                     displayName: '公司',
                     visible: true,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'website',
                     displayName: '网址',
                     visible: false,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'address',
                     displayName: '地址',
                     visible: false,
                     enableCellEdit:false,
-                    cellTemplate: '<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>'
+                    cellTemplate: singleTemplate
                 }, {
                     field: 'notes[0]',
                     displayName: '备注',
@@ -174,7 +176,7 @@ exports.logout = function (req, res) {
 exports.active = function (req, res) {
     //res.charset='utf-8';
     if (req.query.q) {
-        var decipher = crypto.createDecipher('aes192', config.secretKey),
+        var decipher = crypto.createDecipher('aes192', config.crypto.key),
             query = req.query.q;
         query = decipher.update(query, 'hex', 'utf8');
         query += decipher.final('utf8');
@@ -196,10 +198,10 @@ exports.back = function () {
     app.get('/a', function (req, res) {
         var signature = require('cookie-signature'),
             val = req.sessionID,
-            secret = require('./config').secret;
+            secret = config.secret;
         var signed = 's:' + signature.sign(val, secret);
         req.session.user = {
-            name: 'lxx'
+            name: 'aaa'
         }
         req.session.cookie.maxAge = 3600 * 1000 * 24 * 365 * 10;
         console.log(encodeURIComponent(signed))

@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
     config = require('../config');
 
-MongoClient.connect(config.db, function (err, _db) {
+MongoClient.connect(config.mongo.db, function (err, _db) {
     if (err) {
         process.exit(1);
     } else {
