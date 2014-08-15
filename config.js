@@ -3,8 +3,8 @@ var config = {
     debug: true,
     maxAge: 3600000 * 24,
     mongo:{
-        db: 'mongodb://127.0.0.1/lianyun',
-        secret: 'synorme'
+        db: 'mongodb://127.0.0.1/example',
+        secret: 'secret'
     },
     mail:{
         email:'service@example.com',
