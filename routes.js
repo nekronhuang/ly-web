@@ -1,5 +1,4 @@
 var contacts = require('./controllers/contacts'),
-    members = require('./controllers/members'),
     sign = require('./controllers/sign'),
     render = require('./controllers/render'),
     rest = require('./controllers/rest'),
@@ -37,9 +36,6 @@ module.exports = function (app) {
     app.post('/app/contacts/add', filter.authorize, contacts.add);
     app.post('/app/contacts/upload/start', filter.authorize, contacts.startUpload);
     app.post('/app/contacts/upload/end', filter.authorize, contacts.endUpload);
-
-    app.get('/app/members',filter.authorize,members.showMembers);
-    app.post('/app/members/invite',filter.authorize,members.inviteMembers);
 
     app.get('/app/index', function (req, res) {
         res.render('index');
