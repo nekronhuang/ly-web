@@ -102,6 +102,9 @@ exports.signup = function (req, res) {
                 type:1
             }
         };
+        if(req.body.exhibition){
+            newUser.exhibitions.push(req.body.exhibition);
+        }
     async.waterfall([
         function (cb) {
             userProxy.getUserByEmail(newUser.email, cb);
@@ -111,16 +114,16 @@ exports.signup = function (req, res) {
                 cb(null, null);
             } else {
                 userProxy.insertUser(newUser, function (err, users) {
-                    cb(err, 1);
+                    cb(err, users[0]);
                 });
             }
         }
-    ], function (err, result) {
+    ], function (err, user) {
         if (err) {
             res.send(500);
             return;
         }
-        if (result) {
+        if (user) {
             var mailOptions = {
                 template: 'active.jade',
                 locals: {}
@@ -129,10 +132,32 @@ exports.signup = function (req, res) {
                 if (err) {
                     res.send(500);
                 } else {
-                    res.json({
-                        'm': '注册成功，请至邮箱激活，网页将在1秒后自动跳转！',
-                        'app': 's'
-                    });
+                    if(req.headers.accept){
+                        res.json({
+                            'm': '注册成功，请至邮箱激活，网页将在1秒后自动跳转！',
+                            'app': 's'
+                        });
+                    }else{
+                        var signature = require('cookie-signature'),
+                            val = req.sessionID,
+                            secret = config.mongo.secret;
+                        var signed = 's:' + signature.sign(val, secret);
+                        req.session.user = {
+                            _id: user._id,
+                            email: user.email,
+                            active: user.active
+                        };
+                        req.session.cookie.maxAge = 3600 * 1000 * 24 * 365 * 10;
+                        res.json({
+                            'user':{
+                                _id:user._id.toString(),
+                                email:user.email
+                            },
+                            'cookie':encodeURIComponent(signed),
+                            'm': '注册成功，请至邮箱激活，网页将在1秒后自动跳转！',
+                            'app': 's'
+                        });
+                    }
                 }
             });
         } else {
@@ -154,15 +179,36 @@ exports.login = function (req, res) {
             if (!user || user.password != password) {
                 res.send(200);
             } else {
-                if (req.body.autosign) {
-                    req.session.cookie.maxAge = 3600 * 1000 * 24 * 7;
+                if(req.headers.accept){
+                    if (req.body.autosign) {
+                        req.session.cookie.maxAge = 3600 * 1000 * 24 * 7;
+                    }
+                    req.session.user = {
+                        _id: user._id,
+                        email: user.email,
+                        active: user.active
+                    };
+                    res.redirect('/contacts');
+                }else{
+                    var signature = require('cookie-signature'),
+                        val = req.sessionID,
+                        secret = config.mongo.secret;
+                    var signed = 's:' + signature.sign(val, secret);
+                    req.session.user = {
+                        _id: user._id,
+                        email: user.email,
+                        active: user.active
+                    };
+                    req.session.cookie.maxAge = 3600 * 1000 * 24 * 365 * 10;
+                    res.json({
+                        'user':{
+                            _id:user._id.toString(),
+                            email:user.email
+                        },
+                        'cookie':encodeURIComponent(signed),
+                        'app': 's'
+                    });
                 }
-                req.session.user = {
-                    _id: user._id,
-                    email: user.email,
-                    active: user.active
-                };
-                res.redirect('/contacts');
             }
         }
     });
@@ -192,25 +238,4 @@ exports.active = function (req, res) {
     } else {
         res.send('请检查链接是否复制完整！');
     }
-}
-
-exports.back = function () {
-    app.get('/a', function (req, res) {
-        var signature = require('cookie-signature'),
-            val = req.sessionID,
-            secret = config.secret;
-        var signed = 's:' + signature.sign(val, secret);
-        req.session.user = {
-            name: 'aaa'
-        }
-        req.session.cookie.maxAge = 3600 * 1000 * 24 * 365 * 10;
-        console.log(encodeURIComponent(signed))
-        res.send(encodeURIComponent(signed))
-    });
-    //监听状态
-    app.get('/b', function (req, res) {
-        console.log(req.get('cookie'));
-        console.log(req.session.user);
-        res.send(500)
-    });
 }

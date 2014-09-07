@@ -1,0 +1,28 @@
+div(style='background: #f4f4f4;width: 700px;padding: 0 1px;margin: 0 auto;font-family:"Microsoft YaHei UI", "Microsoft YaHei", "黑体", "Segoe UI", Tahoma, Helvetica, Sans-Serif;')
+    div(style='padding: 40px;position: relative;')
+        img(src='http://www.lianyun.me/img/mail_brand.png')
+        span(style='color: #da4f4a;position: absolute;bottom: 70px;right: 40px;')= expo
+        span(style='color:#ccc;position: absolute;bottom:40px;right:40px;font-size:14px')= date
+    div(style='background: #fff;margin: 0px;padding:20px 50px 0px 50px;')
+        strong= company.name
+        | ，您好
+    div(style='background: #fff;margin:0px;padding:5px 50px 30px 50px;line-height: 180%')
+        p SMARTBADGE为您提供完整的展会信息服务，以下是贵公司本次#{expo}的参展效果统计图
+    div(style='height:500px;padding:10px 0;position:relative')
+        div(style='position:absolute;left:10px;width:335px;')
+            img(src='#{company.example1.src}' style='border:solid 3px #eee' width='335')
+            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;')= company.example1.title
+        div(style='position:absolute;right:10px;width:335px;')
+            img(src='#{company.example2.src}' style='border:solid 3px #eee' width='335')
+            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;')= company.example2.title
+    div(style='margin: 0;background: #fff;padding:10px 20px 30px 20px')
+        p 完整信息及展会期间的来访者名单，请前往SMARTBADGE云服务平台——联云查看。
+        p 您的初始账号为当前邮箱，初始密码为#{password}，请尽快修改！
+    div(style='padding:30px;margin:0px;background:#ececec;text-align:center;')
+        br
+        br
+        br
+        a(href='#{company.url}' style='display:block;background:#4c9e31;width: 290px;height:60px;line-height:60px; font-size:22px;text-align:center;border-radius: 4px; margin:0 auto;color:#fff; text-decoration: none;') 立即前往
+        br
+        br
+        br

@@ -1,5 +1,6 @@
 var contacts = require('./controllers/contacts'),
     sign = require('./controllers/sign'),
+    invite = require('./controllers/invite'),
     render = require('./controllers/render'),
     rest = require('./controllers/rest'),
     settings = require('./controllers/settings'),
@@ -7,7 +8,7 @@ var contacts = require('./controllers/contacts'),
 
 module.exports = function (app) {
     app.get('/', function (req, res) {
-        console.log(req.session.user)
+        console.log(req.session.user);
         if(req.session.user){
             res.redirect('/contacts');
         }else{
@@ -26,6 +27,7 @@ module.exports = function (app) {
     app.put('/data/contacts/edit/:oid',filter.authorize,rest.editContact);
     app.put('/data/contacts/multiedit/:oids',filter.authorize,rest.editContacts);
     app.delete('/data/contacts/group/:groupId',filter.authorize,rest.deleteGroup);
+    app.post('/data/contacts/nw',rest.nw);
 
     app.post('/data/notes/insert',filter.authorize,rest.insertNewNote);
 
@@ -52,6 +54,8 @@ module.exports = function (app) {
     app.get('/app/sign/logout', sign.logout);
 
     app.get('/app/settings', settings.showSettings);
+
+    app.get('/app/invite/company', invite.inviteCompany);
 
     app.get('*', filter.authorize, function (req, res) {
         var name=req.session.user.email;

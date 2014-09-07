@@ -290,6 +290,54 @@ exports.editContacts = function (req, res) {
     });
 }
 
+exports.nw=function(req,res){
+    var newContact = req.body.newContact,
+        newNote = req.body.newNote,
+        user = req.body.email;
+    async.each(req.body.contacts, function(newContact, cb) {
+        newContact.extra = [];
+        newContact.group = null;
+        newContact.tags = ['模拟展会'];
+        newContact.type = 1;
+        newContact.belongTo = new mongo.ObjectID(req.session.user._id);
+        newContact.copyFrom = newContact.belongTo;
+        newContact.createAt = Date.now();
+        newContact.updateAt = newContact.createAt;
+        newNote = newContact.time;
+        delete newContact.time;
+        async.waterfall([
+            function(next) {
+                contactProxy.insertContact(newContact, function(err, contacts) {
+                    next(err, contacts[0]._id);
+                });
+            },
+            function(cid, next) {
+                if (newNote.length) {
+                    var notes = []
+                    for (var i = 0, len = newNote.length; i < len; i++) {
+                        notes.push({
+                            author: new mongo.ObjectID(req.session.user._id),
+                            belongTo: cid,
+                            createAt: Date.now(),
+                            content: newNote[i] + ' 参观展台'
+                        });
+                    }
+                    noteProxy.insertNote(notes, function(err, notes) {
+                        next(err, cid.toString());
+                    });
+                } else {
+                    next(null, cid.toString());
+                }
+            },
+        ], function(err, cid) {
+            cb(err);
+        });
+    }, function(err) {
+        if (err) console.error(err);
+        else res.send(200)
+    });
+}
+
 exports.insertNewNote = function (req, res) {
     var newNote = {
         author: new mongo.ObjectID(req.session.user._id),

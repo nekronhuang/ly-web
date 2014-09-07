@@ -3,15 +3,15 @@ var config = {
     debug: true,
     maxAge: 3600000 * 24,
     mongo:{
-        db: 'mongodb://127.0.0.1/example',
-        secret: 'secret'
+        db: 'mongodb://127.0.0.1/lianyun',
+        secret: 'synorme'
     },
     mail:{
-        email:'service@example.com',
-        password: 'password'
+        email:'service@sinorvi.com',
+        password: 'lxxlxx9179'
     },
     crypto:{
-        key:'secretKey'
+        key:'lxxlxx9179'
     }
 }
 

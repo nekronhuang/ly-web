@@ -13,18 +13,27 @@ html
     body
         .container
             div
-                form(name='reg' novalidate method='post' action='app/sign/signup')
-                    input(name='email' type='email' placeholder='email' required)
-                    input(name='password' type='password' placeholder='password' required)
-                    button(type='submit') 注册
-                form(name='login' novalidate method='post' action='app/sign/login')
-                    input(name='email' type='email' placeholder='email' required)
-                    input(name='password' type='password' placeholder='password' required)
-                    button(type='submit') 登录
-            .margin
-                svg#logo(width='84' height='84' xmlns='http://www.w3.org/2000/svg')
-                    path.line(style='stroke-width: 2;stroke: #ddd;fill:none;' d='M 80.889194,41.80541 C 80.889194,63.45198 63.341174,81 41.694594,81 20.048024,81 2.5,63.45198 2.5,41.80541 2.5,20.158827 20.048024,2.61081 41.694594,2.61081 c 21.64658,0 39.1946,17.548017 39.1946,39.1946 z')
-                .hidden(data-svg='logo' style='background:#f00;')
+                //- form(name='reg' novalidate method='post' action='app/sign/signup')
+                //-     input(name='email' type='email' placeholder='email' required)
+                //-     input(name='password' type='password' placeholder='password' required)
+                //-     button(type='submit') 注册
+
+                form.form-horizontal(name='login' novalidate method='post' action='app/sign/login' style="margin-top:100px;")
+                    .form-group
+                        label.control-label.col-sm-2 邮箱
+                        .col-sm-4
+                            input.form-control(name='email' type='email' placeholder='email' required)
+                    .form-group
+                        label.control-label.col-sm-2 密码
+                        .col-sm-4
+                            input.form-control(name='password' type='password' placeholder='password' required)
+                    .form-group
+                        .col-sm-offset-2.col-sm-4
+                            button.btn.btn-default(type='submit') 登录
+            //- .margin
+            //-     svg#logo(width='84' height='84' xmlns='http://www.w3.org/2000/svg')
+            //-         path.line(style='stroke-width: 2;stroke: #ddd;fill:none;' d='M 80.889194,41.80541 C 80.889194,63.45198 63.341174,81 41.694594,81 20.048024,81 2.5,63.45198 2.5,41.80541 2.5,20.158827 20.048024,2.61081 41.694594,2.61081 c 21.64658,0 39.1946,17.548017 39.1946,39.1946 z')
+            //-     .hidden(data-svg='logo' style='background:#f00;')
         script(src='/lib/shim.min.js')
         script(src='/lib/jquery.min.js')
         script(src='/js/transition.js')
