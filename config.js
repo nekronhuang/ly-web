@@ -1,4 +1,5 @@
 var config = {
+    website: 'http://www.lianyun.me/',
     port: 9180,
     debug: true,
     maxAge: 3600000 * 24,
@@ -12,6 +13,9 @@ var config = {
     },
     crypto:{
         key:'lxxlxx9179'
+    },
+    storage:{
+        url:'http://www.lianyun.me/'
     }
 }
 

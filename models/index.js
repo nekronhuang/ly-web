@@ -28,5 +28,6 @@ MongoClient.connect(config.mongo.db, function (err, _db) {
         exports.User=_db.collection('users');
         exports.Contact=_db.collection('contacts');
         exports.Note=_db.collection('notes');
+        exports.Stat=_db.collection('statistics');
     }
 });

@@ -44,7 +44,7 @@ exports.sendMail=function(email,options,callback){
             subject: options.subject,
             html: html
         };
-    transport.sendMail(mailOptions, function (err) {
-        callback(err);
+    transport.sendMail(mailOptions, function (err,info) {
+        callback(err,info);
     });
 }

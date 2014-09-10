@@ -3,6 +3,7 @@ var contacts = require('./controllers/contacts'),
     invite = require('./controllers/invite'),
     render = require('./controllers/render'),
     rest = require('./controllers/rest'),
+    stat = require('./controllers/stat'),
     settings = require('./controllers/settings'),
     filter = require('./tools/filter');
 
@@ -40,7 +41,7 @@ module.exports = function (app) {
     app.post('/app/contacts/upload/end', filter.authorize, contacts.endUpload);
 
     app.get('/app/index', function (req, res) {
-        res.render('index');
+        res.redirect('/index');
     });
     app.get('/index', function (req, res) {
         res.render('index');
@@ -56,6 +57,8 @@ module.exports = function (app) {
     app.get('/app/settings', settings.showSettings);
 
     app.get('/app/invite/company', invite.inviteCompany);
+
+    app.get('/stat/email/open',stat.openEmail);
 
     app.get('*', filter.authorize, function (req, res) {
         var name=req.session.user.email;
