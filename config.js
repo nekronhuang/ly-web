@@ -15,7 +15,7 @@ var config = {
         key:'lxxlxx9179'
     },
     storage:{
-        url:'http://www.lianyun.me/'
+        url:'http://lianyun.qiniudn.com/'
     }
 }
 
