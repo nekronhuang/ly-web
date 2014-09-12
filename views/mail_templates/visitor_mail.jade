@@ -1,0 +1,45 @@
+div(style='background: #f4f4f4;width: 700px;padding: 0 1px;margin: 0 auto;font-family:Microsoft YaHei,黑体;')
+    img(src='http://www.lianyun.me/stat/email/open' width='0' height='0' style='display:none;')
+    div(style='padding: 40px;position: relative;')
+        img(src='http://www.lianyun.me/img/mail_brand.png')
+        span(style='color: #da4f4a;position: absolute;bottom: 70px;right: 40px;')= expo
+        span(style='color:#ccc;position: absolute;bottom:40px;right:40px;font-size:14px')= date
+    div(style='background: #fff;margin: 0px;padding:20px 50px 0px 50px;')
+        strong= visitor.name
+        case visitor.gender
+            when '男'
+                | 先生，您好
+            when '女'
+                | 女士，您好
+            default
+                | 先生/女士，您好
+    div(style='background: #fff;margin:0px;padding:5px 50px 30px 50px;line-height: 180%')
+        p(style='text-indent:2em;') 展会顺利闭幕了，展后的后续评估与跟进是否已经开始了呢？
+        ul(style='margin-left:2em;')
+            li 将销售业绩与预定目标相比,看看是否完成,原因何在
+            li 将实际花费与预算相比,看看是节约还是超支
+            li 对获得的市场信息进行分析和评价
+            li ……
+        p(style='text-indent:2em;') 通过系统的参展评估，更清楚地了解此次参展表现，为今后获得更好的展览效果积累经验。
+        p(style='text-indent:2em;') SMARTBADGE为您提供完整的展会信息服务，通过我们提供的数据，帮助您更好的评估和分析参展效果，并且为您接下来开展的展后跟进工作提供信息支持。
+        p(style='text-indent:2em;') 本次#{expo}，的参展观众在贵公司展台留下联系方式，排名所有展台中的第名。以下是贵公司本次参展相关的数据统计图：
+    div(style='padding:10px;')
+        each rank in visitor.data
+            table(style='width:100%;border-collapse:collapse;margin-bottom:20px;')
+                thead
+                    tr
+                        th(colspan='3' style='position:relative;background-color: #f9f9f9;background-image: -o-linear-gradient(top,#f8f8f8 0%,#f0f0f0 100%);box-shadow: 1px 4px 5px rgba(221,221,221,0.7);padding:10px 5px;font-weight: bold;border: 1px solid #ddd;')= rank.area
+                tbody
+                    each item,i in rank.list
+                        tr(valign='middle' style='background:#fcfcfc;')
+                            td(style='border: 1px solid #eee;padding:15px 10px;font-family:Microsoft YaHei,黑体;' width='30')
+                                span(style='background:#FFDC00;padding:6px 8px;border-radius:3px;color:#fff;font-weight:bold;')= '#'+(i+1)
+                            td(style='border: 1px solid #eee;padding:15px 10px;font-family:Microsoft YaHei,黑体;')
+                                a(style='text-decoration:none;color:#000;' href='#{item.url}')
+                                    div(style='font-size: 15px;line-height: 1.2em;font-weight: bold;')= item.name
+                                    if item.product
+                                        div(style='font-size: 10px;color: #999;')= item.product.join('，')
+                            td(style='border: 1px solid #eee;padding:15px 10px;font-family:Microsoft YaHei,黑体;' width='70')= '访问'+item.number+'次'
+                    tr(style='background: #fcfcfc;')
+                        td(colspan='3' align='right' style='border: 1px solid #eee;padding:10px;font-family:Microsoft YaHei,黑体;')
+                            a(href='#{rank.url}' style='text-decoration:none;color:#da4f4a;') 更多&gt;&gt;

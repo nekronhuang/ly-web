@@ -57,6 +57,7 @@ module.exports = function (app) {
     app.get('/app/settings', settings.showSettings);
 
     app.get('/app/invite/company', invite.inviteCompany);
+    app.get('/app/invite/visitor', invite.inviteVisitor);
 
     app.get('/stat/email/open',stat.openEmail);
 
