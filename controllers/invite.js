@@ -37,6 +37,18 @@ exports.inviteCompany = function(req, res) {
     });
 }
 
+exports.c=function(){
+    var access='0qFcV5djdHEtc8ACa3elW10DI3EIoUZF2MRZ3cIx';
+    var url='http://com-sinorvi-data2pic.qiniudn.com/';
+    url+='img/536ED4EA672621F7FE7C5BB3/stream_in_time_500_500.png'
+    url+='?e=1451491200'
+    var hmac_sha1=require('crypto').createHmac('sha1', 'aLJT6WsbM7LXz-904hfAVezwMomrOTXGhKarZYqe');
+    var str=hmac_sha1.update(url).digest('base64');
+    str=str.replace(/\//g, '_').replace(/\+/g, '-');
+    var end=url+'&token='+access+':'+str;
+    console.log(end);
+}
+
 exports.inviteVisitor = function(req, res) {
     var mailOptions = {
         template: 'visitor_mail.jade',
