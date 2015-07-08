@@ -9,10 +9,10 @@ var config = {
     },
     mail:{
         email:'service@sinorvi.com',
-        password: 'lxxlxx9179'
+        password: 'xxxx'
     },
     crypto:{
-        key:'lxxlxx9179'
+        key:'xxxx'
     },
     storage:{
         url:'http://lianyun.qiniudn.com/'
