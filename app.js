@@ -16,11 +16,11 @@ var express = require('express'),
     routes = require('./routes'),
     config = require('./config');
 
-app.use(logger('dev'));
+
 app.use(compress());
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(express.static(__dirname + '/public'));
-
+app.use(logger('dev'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.engine('jade', jade.__express);

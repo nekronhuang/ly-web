@@ -2,7 +2,7 @@ var fs=require('fs'),
     async=require('async'),
     iconv=require('iconv-lite'),
     mongo=require('mongodb'),
-    models=require('../models'),
+    models = require('../models'),
     contactProxy=require('../proxy/contact'),
     userProxy=require('../proxy/user'),
     noteProxy=require('../proxy/note');
@@ -68,7 +68,7 @@ exports.add = function(req, res) {
         }
     ], function(err,cid) {
         if (err) {
-            res.send(500);
+            res.sendStatus(500);
         } else {
             res.json({
                 info:user,
@@ -98,9 +98,16 @@ exports.showDetail = function(req, res) {
             }
         }
     ], function(err,contact) {
+        var insert={
+            user:req.session.user._id,
+            target:req.query.id,
+            time:new Date().Format('yyyy-MM-dd hh:mm:ss'),
+            timestamp:Date.now(),
+        }
+        models.Stat.insert(insert,function(err){});
         if(err){
             console.error(err);
-            res.send(500);
+            res.sendStatus(500);
         }else{
             res.render('detail', {
                 data: JSON.stringify(contact)
@@ -137,8 +144,8 @@ exports.startUpload=function(req,res){
                 var str=buf[0]==239&&buf[1]==187&&buf[2]==191?buf.toString():iconv.decode(buf,'gbk'),
                     lines=str.split('\r\n'),
                     rows=[];
-                rows.push(lines[0].split(','));
-                rows.push(lines[1].split(','));
+                rows.push(lines[0].split('$'));
+                rows.push(lines[1].split('$'));
 
                 for(var i=0,len=rows[0].length;i<len;i++){
                     var line={};
@@ -159,7 +166,7 @@ exports.startUpload=function(req,res){
     }else if(type==mimeType[1]||type==mimeType[2]||type==mimeType[3]){
 
     }else{
-        res.send('格式')
+        res.sendStatus('格式')
     }
 }
 
@@ -195,19 +202,18 @@ exports.endUpload=function(req,res){
                 }
             }
         for(var i=1,outer=lines.length;i<outer;i++){
-            var line=lines[i].split(','),
+            var line=lines[i].split('$'),
                 obj={
                     name:'',
-                    gender:'',
+                    time:'',
+                    country:'',
                     email:'',
-                    qq:'',
                     area:'',
                     department:'',
                     position:'',
                     company:'',
                     website:'',
                     address:'',
-                    field:[],
                     mobile:[],
                     number:[],
                     extra:extraArray,
@@ -268,7 +274,7 @@ exports.endUpload=function(req,res){
             }
         ], function(err) {
             if (err) {
-                res.send(500);
+                res.sendStatus(500);
             } else {
                 res.json({
                     info:user

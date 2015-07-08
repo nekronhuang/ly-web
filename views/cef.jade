@@ -1,0 +1,66 @@
+doctype html
+html(ng-app='list' id='ng-app' ng-cloak)
+    head
+        meta(http-equiv='content-type' content='text/html; charset=UTF-8')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge;chrome=1')
+        meta(name='keywords' content='科技,NFC,联云,斯墨,信息')
+        meta(name='description' content='领先的会展信息服务')
+        meta(name='author' content='synorme,上海斯墨信息科技有限公司')
+        title 联云
+        link(rel='shortcut icon' href='/img/favicon.ico')
+        link(rel='stylesheet' type='text/css' href='/css/bootstrap.min.css')
+        link(rel='stylesheet' type='text/css' href='/css/metro.css')
+        link(rel='stylesheet' type='text/css' href='/css/list.css')
+        script(src='/lib/jquery.min.js')
+        script(src='/lib/angular-1.2.7.js')
+        script.
+            var SB=angular.module('list',[]);
+            SB.controller('listCtrl',['$scope',function($scope){
+                $scope.activeTab=0;
+                $scope.tabs=[
+                    {id:0,display:'集成电路/IC'},
+                    {id:1,display:'无源元件'},
+                    {id:2,display:'分立器件'},
+                    {id:3,display:'电源管理'},
+                    {id:4,display:'光电器件'},
+                    {id:5,display:'无线及射频'},
+                ]
+                $scope.results=[
+                    [
+                        {name:'德州仪器（TI）',contact:'蔡凌云',time:'2015-3-12 8:10',mobile:'13900227766',tags:[{name:'放大器',url:'http://www.iceasy.com/list-1-19.html'},{name:'存储器',url:'http://www.iceasy.com/list-1-15.html'}],company:'http://www.iceasy.com/pl/TI',url:['http://www.iceasy.com/list-1-19.html','http://www.iceasy.com/list-1-15.html']},
+                        {name:'Epson',contact:'邢汉宾',time:'2015-3-12 9:21',mobile:'13621652481',tags:[{name:'时钟',url:'http://www.iceasy.com/list-1-23.html'},{name:'晶体',url:'http://www.iceasy.com/list-8-38-258.html'}],company:'http://www.iceasy.com/pl/Epson'},
+                        {name:'IDT',contact:'陈晓航',time:'2015-3-12 10:02',mobile:'13918876681',tags:[{name:'时钟',url:'http://www.iceasy.com/list-1-23.html'},{name:'存储器',url:'http://www.iceasy.com/list-1-15.html'},{name:'电源管理',url:'http://www.iceasy.com/list-433-16-511.html'},],company:'http://www.iceasy.com/pl/IDT'},
+                    ],
+                    [
+                        {name:'国巨公司',contact:'胡承伟',time:'2015-3-12 10:17',mobile:'13651869089',tags:[{name:'其他电阻',url:'http://www.iceasy.com/list-3-29-463.html'},{name:'陶瓷电容',url:'http://www.iceasy.com/list-3-28-166.html'}],company:'http://www.iceasy.com/pl/IDT'},
+                    ]
+                ]
+            }]);
+    body(ng-controller="listCtrl")
+        .container
+            .row
+                .col-md-12.bhoechie-tab-container
+                    .row
+                        .col-md-3.bhoechie-tab-menu
+                            .list-group
+                                a.list-group-item.text-center(href='#' ng-repeat='item in tabs' ng-class='{active:item.id==$parent.activeTab}' ng-click='$parent.activeTab=item.id')
+                                    h3.icon-user-4
+                                    | {{item.display}}
+                        .col-md-9.bhoechie-tab.active
+                            ul.list-unstyled
+                                li.col-md-4(ng-repeat='item in results[activeTab]')
+                                    .panel.panel-primary
+                                        .panel-heading
+                                                h3.panel-title
+                                                    span
+                                                    a(ng-href='{{item.company}}' target='_blank') {{item.name}}
+                                        .panel-body
+                                            strong {{item.contact}}
+                                            dl
+                                                dt 到访时间:
+                                                dd {{item.time}}
+                                                br
+                                                dt 手机:
+                                                dd {{item.mobile}}
+                                            div
+                                                a.btn.btn-sm.btn-info(ng-repeat='btn in item.tags track by $index' ng-href='{{btn.url}}' target='_blank') {{btn.name}}

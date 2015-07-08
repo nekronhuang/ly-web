@@ -1,0 +1,57 @@
+#sb-expos
+    .sb-column.left
+        ul
+            li.active 上海科技活动周
+    .sb-column.middle
+        ul
+            li(ng-class='{active:activeModules.display=="观众（行业关注度很高）"}' ng-click='changeGroup(1)')
+                span(tooltip="参观过70%的同行业展台") 观众（行业关注度很高）
+                span.badge.bg-danger.pull-right 336
+            li(ng-class='{active:activeModules.display=="观众（行业关注度较高）"}' ng-click='changeGroup(2)')
+                span(tooltip="参观过50%的同行业展台") 观众（行业关注度较高）
+                span.badge.bg-warning.pull-right 581
+            li(ng-class='{active:activeModules.display=="来访观众分日期流量"}' ng-click='activeModules={display:"来访观众分日期流量"}') 来访观众分日期流量
+            li(ng-class='{active:activeModules.display=="来访观众分时段流量"}' ng-click='activeModules={display:"来访观众分时段流量"}') 来访观众分时段流量
+            li(ng-class='{active:activeModules.display=="来访观众关注领域分布"}' ng-click='activeModules={display:"来访观众关注领域分布"}') 来访观众关注领域分布
+            li(ng-class='{active:activeModules.display=="来访观众年龄分布"}' ng-click='activeModules={display:"来访观众年龄分布"}') 来访观众年龄分布
+    .sb-column.right
+        .list-main
+            .header
+                span.group-name {{activeModules.display}}
+            div(ng-show='activeModules.display=="观众（行业关注度很高）"||activeModules.display=="观众（行业关注度较高）"')
+                .operation
+                    span.chosen 已选 {{mySelections.length}} 位
+                    span
+                        button.btn.btn-sm.btn-primary(ng-click='gridOptions.selectAll(false)') 取消选择
+                    span.dropdown(dropdown)
+                        button.btn.btn-sm.btn-primary.dropdown-toggle(dropdown-toggle ng-disabled='mySelections.length==0')
+                            | 操作
+                            span.caret
+                        ul.dropdown-menu
+                            li
+                                a(href='#' ng-click='downloadList()') 下载
+                            li.dropdown-submenu
+                                a(href='#') 添加到组
+                                ul.dropdown-menu
+                                    li(ng-if='groups.custom.length==0')
+                                        a 无
+                                    li(ng-repeat='group in groups.custom' ng-click='targetGroup(group)')
+                                        a(href='#') {{group.display}}
+                                    li.divider
+                                    li.new-group(ng-newgroup ng-init='newgroup={input:false,key:"contactGroups",hideCancel:true}')
+                            li.divider
+                            li
+                                a(href='#') 删除联系人
+                    span.pull-right
+                        button.btn.btn-sm.btn-primary(ng-click='openCustomModal("sm")')
+                            | 自定义
+                .list-grid
+                    .grid-theme(ng-grid='gridOptions')
+            div(ng-show='activeModules.display=="来访观众分日期流量"')
+                img(src='/img/stream_in_date_500_350.png' height='400' style='position:absolute;top:50%;left:50%;margin-left:-350px;margin-top:-200px;')
+            div(ng-show='activeModules.display=="来访观众分时段流量"')
+                img(src='/img/stream_in_time_500_350.png' height='400' style='position:absolute;top:50%;left:50%;margin-left:-350px;margin-top:-200px;')
+            div(ng-show='activeModules.display=="来访观众关注领域分布"')
+                img(src='/img/xingqu.png' height='400' style='position:absolute;top:50%;left:50%;margin-left:-350px;margin-top:-200px;')
+            div(ng-show='activeModules.display=="来访观众年龄分布"')
+                img(src='/img/nianling.png' height='400' style='position:absolute;top:50%;left:50%;margin-left:-350px;margin-top:-200px;')

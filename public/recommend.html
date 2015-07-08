@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>导航</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src='/lib/jquery.min.js'></script>
+<style type="text/css">
+  body{
+    font-family: 'Microsoft YaHei UI', 'Microsoft YaHei', '黑体', 'Segoe UI', Tahoma, Helvetica, Sans-Serif;
+  }
+  #nav{
+    display: block;
+    position: absolute;
+    left: 50%;
+    margin-left:-375px;
+    margin-top:30px;
+  }
+  .clear{
+    clear: both;
+  }
+  #container{
+    display: block;
+    position: absolute;
+    top: 420px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  #main{
+    width: 750px;
+    margin: 0 auto;
+  }
+</style>
+</head>
+<body style="background:url('/img/bg-light.jpg') no-repeat center top;">
+<canvas id="nav" width="750" height="370"></canvas>
+<div class="clear"></div>
+<div id="container">
+  <div id="main">
+    <p>您感兴趣的领域是<strong>医疗</strong>、<strong>科技</strong>。</p>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function(){
+    var map=new Image(),
+        canvas=document.getElementById('nav'),
+        ctx=canvas.getContext('2d');
+    map.onload=function(){
+        ctx.drawImage(map,0,0);
+    }
+    map.src='/img/map.png';
+  });
+</script>
+</body>
+</html>

@@ -1,41 +1,42 @@
 div(style='background: #f4f4f4;width: 700px;padding: 0 1px;margin: 0 auto;font-family:Microsoft YaHei,黑体;')
-    img(src='http://www.lianyun.me/stat/email/open' width='0' height='0' style='display:none;')
-    div(style='padding: 40px;position: relative;')
-        img(src='http://www.lianyun.me/img/mail_brand.png')
-        span(style='color: #da4f4a;position: absolute;bottom: 70px;right: 40px;')= expo
-        span(style='color:#ccc;position: absolute;bottom:40px;right:40px;font-size:14px')= date
+    img(src='#{stat_url}' width='0' height='0' style='display:none;')
+    div(style='padding: 0px;position: relative;')
+        img(src='http://lianyun.qiniudn.com/header.png')
     div(style='background: #fff;margin: 0px;padding:20px 50px 0px 50px;')
         strong= company.name
         | ，您好
     div(style='background: #fff;margin:0px;padding:5px 50px 30px 50px;line-height: 180%')
         p(style='text-indent:2em;') 展会顺利闭幕了，展后的后续评估与跟进是否已经开始了呢？
-        ul(style='margin-left:2em;')
-            li 将销售业绩与预定目标相比,看看是否完成,原因何在
-            li 将实际花费与预算相比,看看是节约还是超支
-            li 对获得的市场信息进行分析和评价
-            li ……
         p(style='text-indent:2em;') 通过系统的参展评估，更清楚地了解此次参展表现，为今后获得更好的展览效果积累经验。
-        p(style='text-indent:2em;') SMARTBADGE为您提供完整的展会信息服务，通过我们提供的数据，帮助您更好的评估和分析参展效果，并且为您接下来开展的展后跟进工作提供信息支持。
-        p(style='text-indent:2em;') 本次#{expo}，#{data.percent+'%'}的参展观众在贵公司展台留下联系方式，排名所有展台中的第#{data.rank}名。以下是贵公司本次参展相关的数据统计图：
-    div(style='height:350px;padding:10px 0;position:relative')
-        div(style='position:absolute;left:10px;width:335px;')
-            img(src='#{company.example2.src}' style='border:solid 3px #eee' width='335')
-            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;') 展台来访者参展目标
-            p
-                | 结合您自身的参展目标，找出潜在客户人群，及时开展后续的精准营销。
-        div(style='position:absolute;right:10px;width:335px;')
-            img(src='#{company.example1.src}' style='border:solid 3px #eee' width='335')
-            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;') 展台分时段人流量
-            p
-                | 帮助您精准回顾来访观众的人数变化走势，结合您在各时间段举办的活动，客观评估活动实施效果。
+        p(style='text-indent:2em;') VNU Exhibitions Asia与SMARTBADGE为您提供完整的展会信息服务，通过我们提供的数据，帮助您更好的评估和分析参展效果，并且为您接下来开展的展后跟进工作提供信息支持。
+        p(style='text-indent:2em;') 本次#{expo}，
+            strong &nbsp;#{data.num}&nbsp;
+            | 名观众在贵公司展台留下联系方式，总扫卡次数为
+            strong &nbsp;#{data.times}&nbsp;
+            | 次，排名所有展台中的第
+            strong &nbsp;#{data.rank}&nbsp;
+            | 名。以下是贵公司本次参展相关的数据统计图：
+    div(style='height:auto;padding:1px 0 20px;position:relative;text-align:center')
+        div(style='margin-bottom:50px;')
+            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;') #{company.example1.title}
+            img(src='#{company.example1.src}' style='border:solid 2px #eee' width='550')
+        div(style='margin-bottom:50px;')
+            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;') #{company.example2.title}
+            img(src='#{company.example2.src}' style='border:solid 2px #eee' width='550')
+        div(style='margin-bottom:50px;')
+            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;') #{company.example3.title}
+            img(src='#{company.example3.src}' style='border:solid 2px #eee' width='550')
+        div
+            h4(style='font-size:20px;color:#222;margin:10px;margin-left:20px;') #{company.example4.title}
+            img(src='#{company.example4.src}' style='border:solid 2px #eee' width='550')
     div(style='margin: 0;background: #fff;padding:10px 20px 30px 20px')
-        p(style='text-indent:2em;') 完整信息及展会期间的所有来访者名单，请前往SMARTBADGE云服务平台——联云查看。
-        p(style='text-indent:2em;') 您的初始账号为当前邮箱，初始密码为#{password}，请尽快修改！
-    div(style='padding:30px;margin:0px;background:#ececec;text-align:center;')
+        p(style='text-indent:2em;') 完整信息及展会期间的所有来访者名单，请前往SMARTBADGE平台——联云查看。
+        p(style='text-indent:2em;') 您的初始账号为#{account}，初始密码为#{password}，请尽快修改！
+    div(style='margin:0px;background:#ececec;text-align:center;')
         br
         br
-        br
-        a(href='#{company.url}' style='display:block;background:#4c9e31;width: 290px;height:60px;line-height:60px; font-size:22px;text-align:center;border-radius: 4px; margin:0 auto;color:#fff; text-decoration: none;') 立即前往
-        br
+        a(href='http://lianyun.me' style='display:block;background:#4c9e31;width: 290px;height:60px;line-height:60px; font-size:22px;text-align:center;border-radius: 4px; margin:0 auto;color:#fff; text-decoration: none;') 立即前往
         br
         br
+    div(style="background: #fff;padding-top:20px;text-align:right;")
+        img(src='http://lianyun.qiniudn.com/mail_brand.png')

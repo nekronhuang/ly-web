@@ -1,81 +1,80 @@
-.sb-column.left
-    ul.group-default
-        li(ng-click='changeGroup("total","全部联系人")' ng-class='{active:activeGroup.display=="全部联系人"}')
-            | 全部联系人
-            span.badge.bg-primary.pull-right {{groups.total}}
-        li(ng-click='changeGroup("ungrouped","未分组联系人")' ng-class='{active:activeGroup.display=="未分组联系人"}')
-            | 未分组联系人
-            span.badge.bg-primary.pull-right {{groups.ungrouped}}
-    ul.group-custom(ng-nicescroll ns-options='{horizrailenabled:false}')
-        li
-            ul
-                li(ng-repeat='group in groups.default' ng-click='changeGroup(null,group.display)' ng-class='{active:activeGroup.display==group.display}')
-                    span.text {{group.display}}
-                    span.badge.bg-primary.pull-right {{group.number}}
-                li(ng-repeat='group in groups.custom' ng-click='changeGroup(group.groupId,group.display)' ng-class='{active:activeGroup.display==group.display}')
-                    span.text {{group.display}}
-                    span.badge.bg-primary.pull-right {{group.number}}
-    ul.group-new
-        li.new-group(ng-newgroup ng-init='newgroup={input:false,key:"contactGroups",hideCancel:true}')
-.sb-column.right
-    .list-filter
-        .panel.panel-info
-            .panel-heading 筛选条件
-            .panel-body
-                .row
-                    .col-xs-5
-                        .input-group.dropdown.pointer(is-open='filter.isOpen' dropdown)
-                            span.input-group-addon.dropdown-toggle(dropdown-toggle)
-                                | {{filter.factor.display}}
-                                span.caret
-                            ul.dropdown-menu
-                                li(ng-repeat='r in filter.range')
-                                    a(href='#' ng-click='filter.factor.display=r.display;filter.factor.key=r.key;filter.isOpen=!filter.isOpen') {{r.display}}
-                            input.form-control(ng-model='filter.factor.value')
-                    .col-xs-2
-                        button.btn.btn-primary(ng-click='confirmFilter()')
-                            span.glyphicon.glyphicon-search
-                            span 筛选
-    .list-main
-        .header
-            span.group-name {{activeGroup.display}}
-            span.pull-right.dropdown(dropdown ng-if='activeGroup.groupId!="total"&&activeGroup.groupId!="ungrouped"')
-                button.btn.btn-sm.btn-primary.dropdown-toggle(dropdown-toggle)
-                    span.glyphicon.glyphicon-wrench
-                    | &nbsp;群组操作
-                    span.caret
-                ul.dropdown-menu
-                    li
-                        a(href='#' ng-click='deleteGroup()') 删除该组
-                    li
-                        a(href='#' ng-click='clearGroup()') 清空该组
-        .operation
-            span.chosen 已选 {{mySelections.length}} 位
-            span
-                button.btn.btn-sm.btn-primary(ng-click='gridOptions.selectAll(false)') 取消选择
-            span.dropdown(dropdown)
-                button.btn.btn-sm.btn-primary.dropdown-toggle(dropdown-toggle ng-disabled='mySelections.length==0')
-                    | 操作
-                    span.caret
-                ul.dropdown-menu
-                    li
-                        a(href='#' ng-click='downloadList()') 下载
-                    li.dropdown-submenu
-                        a(href='#') 添加到组
+#sb-contacts-list
+    .sb-column.left
+        ul.group-default
+            li(ng-click='changeGroup("total","全部联系人")' ng-class='{active:activeGroup.display=="全部联系人"}')
+                | 全部联系人
+                span.badge.bg-primary.pull-right {{groups.total}}
+            li(ng-click='changeGroup("ungrouped","未分组联系人")' ng-class='{active:activeGroup.display=="未分组联系人"}')
+                | 未分组联系人
+                span.badge.bg-primary.pull-right {{groups.ungrouped}}
+        ul.group-custom(ng-nicescroll ns-options='{horizrailenabled:false}')
+            li
+                ul
+                    li(ng-repeat='group in groups.default' ng-click='changeGroup(null,group.display)' ng-class='{active:activeGroup.display==group.display}')
+                        span.text {{group.display}}
+                        span.badge.bg-primary.pull-right {{group.number}}
+                    li(ng-repeat='group in groups.custom' ng-click='changeGroup(group.groupId,group.display)' ng-class='{active:activeGroup.display==group.display}')
+                        span.text {{group.display}}
+                        span.badge.bg-primary.pull-right {{group.number}}
+        ul.group-new
+            li.new-group(ng-newgroup ng-init='newgroup={input:false,key:"contactGroups",hideCancel:true}')
+    .sb-column.right
+        .list-filter
+            //- .panel.panel-info
+            //-     .panel-heading 筛选条件
+            //-     .panel-body
+            .row
+                .col-xs-5
+                    .input-group.dropdown.pointer(is-open='filter.isOpen' dropdown)
+                        span.input-group-addon.dropdown-toggle(dropdown-toggle)
+                            | {{filter.factor.display}}
+                            span.caret
                         ul.dropdown-menu
-                            li(ng-if='groups.custom.length==0')
-                                a 无
-                            li(ng-repeat='group in groups.custom' ng-click='targetGroup(group)')
-                                a(href='#') {{group.display}}
-                            li.divider
-                            li.new-group(ng-newgroup ng-init='newgroup={input:false,key:"contactGroups",hideCancel:true}')
-                    li(ng-if='activeGroup.groupId!="total"&&activeGroup.groupId!="ungrouped"')
-                        a(href='#' ng-click='targetGroup({})') 移出该组
-                    li.divider
-                    li
-                        a(href='#') 删除联系人
-            span.pull-right
-                button.btn.btn-sm.btn-primary(ng-click='openCustomModal("sm")')
-                    | 自定义
-        .list-grid
-            .grid-theme(ng-grid='gridOptions')
+                            li(ng-repeat='r in filter.range')
+                                a(href='#' ng-click='filter.factor.display=r.display;filter.factor.key=r.key;filter.isOpen=!filter.isOpen') {{r.display}}
+                        input.form-control(ng-model='filter.factor.value')
+                .col-xs-2
+                    button.btn.btn-primary(ng-click='confirmFilter()')
+                        span.glyphicon.glyphicon-search
+                        span 筛选
+        .list-main
+            .header
+                span.group-name {{activeGroup.display}}
+                span.pull-right.dropdown(dropdown ng-if='activeGroup.groupId!="total"&&activeGroup.groupId!="ungrouped"')
+                    button.btn.btn-sm.btn-primary.dropdown-toggle(dropdown-toggle)
+                        span.glyphicon.glyphicon-wrench
+                        | &nbsp;群组操作
+                        span.caret
+                    ul.dropdown-menu
+                        li
+                            a(href='#' ng-click='deleteGroup()') 删除该组
+                        li
+                            a(href='#' ng-click='clearGroup()') 清空该组
+            .operation
+                span.chosen 已选 {{mySelections.length}} 位
+                span
+                    button.btn.btn-sm.btn-primary(ng-click='gridOptions.selectAll(false)') 取消选择
+                span.dropdown(dropdown)
+                    button.btn.btn-sm.btn-primary.dropdown-toggle(dropdown-toggle ng-disabled='mySelections.length==0')
+                        | 操作
+                        span.caret
+                    ul.dropdown-menu
+                        li.dropdown-submenu
+                            a(href='#') 添加到组
+                            ul.dropdown-menu
+                                li(ng-if='groups.custom.length==0')
+                                    a 无
+                                li(ng-repeat='group in groups.custom' ng-click='targetGroup(group)')
+                                    a(href='#') {{group.display}}
+                                li.divider
+                                li.new-group(ng-newgroup ng-init='newgroup={input:false,key:"contactGroups",hideCancel:true}')
+                        li(ng-if='activeGroup.groupId!="total"&&activeGroup.groupId!="ungrouped"')
+                            a(href='#' ng-click='targetGroup({})') 移出该组
+                        //- li.divider
+                        //- li
+                        //-     a(href='#' ng-click='downloadList()') 下载
+                span.pull-right
+                    button.btn.btn-sm.btn-primary(ng-click='openCustomModal("sm")')
+                        | 自定义
+            .list-grid
+                .grid-theme(ng-grid='gridOptions')

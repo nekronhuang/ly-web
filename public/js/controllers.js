@@ -1,11 +1,11 @@
 var controllers = angular.module('SB.controllers', ['SB.services', 'angularFileUpload', 'ngGrid', 'SB.directives'])
 
 controllers.controller('homeCtrl', ['$scope', '$http',
-    function ($scope, $http) {
-        $scope.reg = function (user) {
+    function($scope, $http) {
+        $scope.reg = function(user) {
 
         }
-        $scope.login = function (user) {
+        $scope.login = function(user) {
             $scope.alert = true;
             // $http.post('/web/sign/signup',user).success(function (data){
 
@@ -14,8 +14,8 @@ controllers.controller('homeCtrl', ['$scope', '$http',
     }
 ]);
 
-controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q',
-    function ($scope, $http, $location, sbInfo,$q) {
+controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo', '$q',
+    function($scope, $http, $location, sbInfo, $q) {
         if ($.nicescroll.length && $.nicescroll[0]) {
             $.nicescroll.remove();
         }
@@ -24,7 +24,7 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
                 groups: sbInfo.info.contactGroups
             };
         } else {
-            sbInfo.get().success(function (res) {
+            sbInfo.get().success(function(res) {
                 sbInfo.info = res.info;
                 $scope.user = {
                     groups: sbInfo.info.contactGroups
@@ -35,11 +35,11 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
         $scope.newContact = {};
         $scope.newNote = {};
         $scope.advance = {
-            plus: function (key) {
+            plus: function(key) {
                 $scope.newContact[key].push('');
                 div.getNiceScroll().resize();
             },
-            minus: function (key, index) {
+            minus: function(key, index) {
                 if ($scope.newContact[key].length > 1) {
                     $scope.newContact[key].splice(index, 1);
                     div.getNiceScroll().resize();
@@ -49,9 +49,6 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
             }
         };
         $scope.advancedInfoInput = [{
-            display: '行业',
-            value: 'field'
-        }, {
             display: '手机',
             value: 'mobile'
         }, {
@@ -59,6 +56,9 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
             value: 'number'
         }];
         $scope.basicInfoInput = [{
+            display: '国家',
+            value: 'country'
+        },{
             display: '地区',
             value: 'area'
         }, {
@@ -77,12 +77,12 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
             display: '地址',
             value: 'address'
         }];
-        $scope.addNewContact = function () {
+        $scope.addNewContact = function() {
             var postGroup = null;
             if ($scope.group) {
-                postGroup={
-                    display:$scope.group.display,
-                    groupId:$scope.group.groupId
+                postGroup = {
+                    display: $scope.group.display,
+                    groupId: $scope.group.groupId
                 }
             }
             var post = {
@@ -91,10 +91,10 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
                 newNote: $scope.newNote,
                 group: postGroup
             };
-            $http.post('/app/contacts/add', post).success(function (res) {
+            $http.post('/app/contacts/add', post).success(function(res) {
                 sbInfo.info = res.info;
                 $location.search('id', res.contactId).path('/contacts/detail');
-            }).error(function () {
+            }).error(function() {
 
             });
         }
@@ -102,7 +102,7 @@ controllers.controller('addCtrl', ['$scope', '$http', '$location', 'sbInfo','$q'
 ]);
 
 controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$timeout', 'sbInfo',
-    function ($scope, $http, $fileUploader, $timeout, sbInfo) {
+    function($scope, $http, $fileUploader, $timeout, sbInfo) {
         if ($.nicescroll.length && $.nicescroll[0]) {
             $.nicescroll.remove();
         }
@@ -111,7 +111,7 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
                 groups: sbInfo.info.contactGroups
             };
         } else {
-            sbInfo.get().success(function (res) {
+            sbInfo.get().success(function(res) {
                 sbInfo.info = res.info;
                 $scope.user = {
                     groups: sbInfo.info.contactGroups
@@ -124,25 +124,26 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
             formData: [{}],
             queueLimit: 1,
             filters: [
-                function (item) {
+
+                function(item) {
                     return item.size <= 5242880;
                 }
             ]
         });
         var options = [{
+            label: '时间',
+            key: 'time',
+            multiple: false,
+            disabled: false
+        }, {
             label: '姓名',
             key: 'name',
             multiple: false,
             disabled: false
         }, {
-            label: '性别',
-            key: 'gender',
+            label: '国家',
+            key: 'country',
             multiple: false,
-            disabled: false
-        }, {
-            label: '行业',
-            key: 'field',
-            multiple: true,
             disabled: false
         }, {
             label: '职位',
@@ -185,11 +186,6 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
             multiple: false,
             disabled: false
         }, {
-            label: 'QQ',
-            key: 'qq',
-            multiple: false,
-            disabled: false
-        }, {
             label: '地址',
             key: 'address',
             multiple: false,
@@ -202,12 +198,12 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
         }, ];
         $scope.sys = {
             options: options,
-            mappingConfirm: function () {
+            mappingConfirm: function() {
                 var postGroup = null;
                 if ($scope.group) {
-                    postGroup={
-                        display:$scope.group.display,
-                        groupId:$scope.group.groupId
+                    postGroup = {
+                        display: $scope.group.display,
+                        groupId: $scope.group.groupId
                     }
                 }
                 var post = {
@@ -216,8 +212,10 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
                     format: [],
                     path: $scope.mapping.path
                 };
-                if($scope.mapping.cardid){
-                    $scope.mapping.header.splice({key:'cardid'},1);
+                if ($scope.mapping.cardid) {
+                    $scope.mapping.header.splice({
+                        key: 'cardid'
+                    }, 1);
                 }
                 for (var i = 0, len = $scope.mapping.header.length; i < len; i++) {
                     var item = $scope.mapping.header[i];
@@ -227,38 +225,38 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
                         post.format.push(null);
                     }
                 }
-                $http.post('/app/contacts/upload/end', post).success(function (res) {
+                $http.post('/app/contacts/upload/end', post).success(function(res) {
                     sbInfo.info = res.info;
                     $scope.step = 3;
-                }).error(function () {
+                }).error(function() {
 
                 });
             },
-            mappingCheck: function () {
+            mappingCheck: function() {
                 return !(angular.element('.dbody .active').length > 0);
             }
         };
-        uploader.filters.push(function (item) {
+        uploader.filters.push(function(item) {
             return !uploader.isHTML5 ? true : /(xlsb|xlsm|xlsx|xls|csv)$/.test(item.name);
         });
-        uploader.bind('complete', function (e, xhr, item, res) {
-            var time = $timeout(function () {
+        uploader.bind('complete', function(e, xhr, item, res) {
+            var time = $timeout(function() {
                 $scope.step = 2;
                 angular.element('#sb-contacts-upload .main .step2 .dbody').css('height', angular.element(window).height() - 380).getNiceScroll().resize();
             }, 1000);
             $scope.mapping = res.mapping;
         });
-        $scope.prevStep = function () {
+        $scope.prevStep = function() {
             $scope.step = 1;
         }
         $scope.step = 1;
     }
-]).directive('ngMappingWatcher', function () {
+]).directive('ngMappingWatcher', function() {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function (scope, element, attr) {
-            scope.$watch(attr.ngModel, function (newValue, oldValue) {
+        link: function(scope, element, attr) {
+            scope.$watch(attr.ngModel, function(newValue, oldValue) {
                 var len = scope.$parent.sys.options.length;
                 if (oldValue !== '') {
                     for (var i = 0; i < len; i++) {
@@ -284,8 +282,8 @@ controllers.controller('uploadCtrl', ['$scope', '$http', '$fileUploader', '$time
     };
 });
 
-controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$window','sbInfo',
-    function ($scope, $http, $modal, $window, sbInfo) {
+controllers.controller('contactsListCtrl', ['$rootScope','$scope', '$http', '$modal', '$window', 'sbInfo',
+    function($rootScope,$scope, $http, $modal, $window, sbInfo) {
         if ($.nicescroll.length && $.nicescroll[0]) {
             $.nicescroll.remove();
         }
@@ -293,78 +291,81 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
             $scope.groups = {
                 total: sbInfo.info.groupStatus.contact.total,
                 ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
-                default:sbInfo.info.tags,
+                default: sbInfo.info.tags,
                 custom: sbInfo.info.contactGroups,
             };
             $scope.myColumnDefs = sbInfo.info.settings.columnDefs;
             $scope.myExtraColumns = sbInfo.info.settings.extraColumns;
         } else {
-            sbInfo.get().success(function (res) {
+            sbInfo.get().success(function(res) {
                 sbInfo.info = res.info;
                 $scope.groups = {
                     total: sbInfo.info.groupStatus.contact.total,
                     ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
-                    default:sbInfo.info.tags,
+                    default: sbInfo.info.tags,
                     custom: sbInfo.info.contactGroups,
                 };
                 $scope.myColumnDefs = sbInfo.info.settings.columnDefs;
                 $scope.myExtraColumns = sbInfo.info.settings.extraColumns;
             });
         }
-        $http.get('/data/contacts/group/total').success(function (res) {
+        $http.get('/data/contacts/group/total').success(function(res) {
             $scope.myData = res.data;
-        }).error(function () {
+        }).error(function() {
 
         });
-        $scope.changeGroup = function (id, name) {
-            if(id){
+        $scope.changeGroup = function(id, name) {
+            if (id) {
                 $scope.activeGroup = {
                     display: name,
                     groupId: id
                 };
-                $http.get('/data/contacts/group/' + id).success(function (res) {
+                $http.get('/data/contacts/group/' + id).success(function(res) {
                     $scope.myData = res.data;
                     $scope.gridOptions.selectAll(false);
-                }).error(function () {
+                }).error(function() {
 
                 });
-            }else{
+            } else {
                 $scope.activeGroup = {
                     display: name,
                     groupId: null
                 };
-                $http.get('/data/contacts/tag/' + name).success(function (res) {
+                $http.get('/data/contacts/tag/' + name).success(function(res) {
                     $scope.myData = res.data;
                     $scope.gridOptions.selectAll(false);
-                }).error(function () {
+                }).error(function() {
 
                 });
             }
         };
-        $scope.downloadList=function(){
+        $scope.downloadList = function() {
             var post = {
                     user: sbInfo.info,
-                    update: {
-                        group: group
-                    }
                 },
                 contactIds = [];
             for (var i = 0, len = $scope.mySelections.length; i < len; i++) {
                 var item = $scope.mySelections[i];
                 contactIds.push(item._id);
             }
-        };
-        $scope.deleteGroup=function(){
-            var post = {
-                    user: sbInfo.info,
-                };
-            $http.delete('/data/contacts/group/'+$scope.activeGroup.groupId, post).success(function (res) {
-                $window.location.reload();
-            }).error(function () {
+            post.contactIds=contactIds;
+            $http.post('/data/contacts/download', post).success(function(res) {
+
+            }).error(function() {
 
             });
         };
-        $scope.clearGroup=function(){
+        $scope.deleteGroup = function() {
+            var post = {
+                user: sbInfo.info,
+            };
+            $http.delete('/data/contacts/group/' + $scope.activeGroup.groupId, post).success(function(res) {
+                $window.location.reload();
+            }).error(function() {
+
+            });
+        };
+        $scope.clearGroup = function() {
             var post = {
                     user: sbInfo.info,
                     update: {
@@ -376,24 +377,26 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                 var item = $scope.myData[i];
                 contactIds.push(item._id);
             }
-            $http.put('/data/contacts/multiedit/' + contactIds.join(','), post).success(function (res) {
-                $scope.myData=[];
+            post.contactIds=contactIds;
+            $http.put('/data/contacts/multiedit', post).success(function(res) {
+                $scope.myData = [];
                 sbInfo.info = res.info;
                 $scope.groups = {
                     total: sbInfo.info.groupStatus.contact.total,
                     ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
-                    default:sbInfo.info.tags,
+                    default: sbInfo.info.tags,
                     custom: sbInfo.info.contactGroups,
                 };
-            }).error(function () {
+            }).error(function() {
 
             });
         };
-        $scope.targetGroup = function (group) {
-            var postGroup={
-                display:group.display,
-                groupId:group.groupId
-            },post = {
+        $scope.targetGroup = function(group) {
+            var postGroup = {
+                    display: group.display,
+                    groupId: group.groupId
+                },
+                post = {
                     user: sbInfo.info,
                     update: {
                         group: postGroup
@@ -404,9 +407,10 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                 var item = $scope.mySelections[i];
                 contactIds.push(item._id);
             }
-            if(postGroup.groupId!=$scope.activeGroup.groupId){
-                $http.put('/data/contacts/multiedit/' + contactIds.join(','), post).success(function (res) {
-                    if ($scope.activeGroup.groupId&&$scope.activeGroup.groupId != 'total') {
+            if (postGroup.groupId != $scope.activeGroup.groupId) {
+                post.contactIds=contactIds;
+                $http.put('/data/contacts/multiedit', post).success(function(res) {
+                    if ($scope.activeGroup.groupId && $scope.activeGroup.groupId != 'total') {
                         for (var i = 0, len = $scope.mySelections.length; i < len; i++) {
                             var index = $scope.myData.indexOf($scope.mySelections[i]);
                             $scope.myData.splice(index, 1);
@@ -416,21 +420,38 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                     $scope.groups = {
                         total: sbInfo.info.groupStatus.contact.total,
                         ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
-                        default:sbInfo.info.tags,
+                        default: sbInfo.info.tags,
                         custom: sbInfo.info.contactGroups,
                     };
-                }).error(function () {
+                }).error(function() {
 
                 });
             }
         }
-        $scope.openCustomModal = function (size) {
+        var Delay;
+        $scope.$on('ngGridEventEndCellEdit', function(evt) {
+            var row = evt.targetScope.row.entity,
+                post = {
+                    extra: row.extra
+                };
+            clearTimeout(Delay);
+            if (row.extra.length) {
+                Delay = setTimeout(function() {
+                    $http.put('/data/contacts/edit/' + row._id, post).success(function() {
+
+                    }).error(function() {
+
+                    });
+                }, 500);
+            }
+        });
+        $scope.openCustomModal = function(size) {
             var modalInstance = $modal.open({
                 templateUrl: '/jade/customModal',
                 controller: ModalInstanceCtrl,
                 size: size,
                 resolve: {
-                    transfer: function () {
+                    transfer: function() {
                         return {
                             myColumnDefs: $scope.myColumnDefs,
                             myExtraColumns: $scope.myExtraColumns
@@ -438,33 +459,16 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                     }
                 }
             });
-            modalInstance.result.then(function (columns) {
+            modalInstance.result.then(function(columns) {
                 $scope.myColumnDefs = columns;
-            }, function () {
+            }, function() {
 
             });
         };
-        var Delay;
-        $scope.$on('ngGridEventEndCellEdit', function (evt) {
-            var row = evt.targetScope.row.entity,
-                post = {
-                    extra: row.extra
-                };
-            clearTimeout(Delay);
-            if (row.extra.length) {
-                Delay = setTimeout(function () {
-                    $http.put('/data/contacts/edit/' + row._id, post).success(function () {
-
-                    }).error(function () {
-
-                    });
-                }, 500);
-            }
-        });
-        var ModalInstanceCtrl = function ($scope, $modalInstance, transfer) {
+        var ModalInstanceCtrl = function($scope, $modalInstance, transfer) {
             $scope.myColumnDefs = angular.copy(transfer.myColumnDefs);
             $scope.myExtraColumns = angular.copy(transfer.myExtraColumns);
-            $scope.ok = function () {
+            $scope.ok = function() {
                 var post = {
                     update: {
                         settings: {
@@ -473,37 +477,27 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                         }
                     }
                 }
-                $http.put('/data/users/edit/self', post).success(function () {
+                $http.put('/data/users/edit/self', post).success(function() {
                     $modalInstance.close($scope.myColumnDefs);
                 });
             }
-            $scope.cancel = function () {
+            $scope.cancel = function() {
                 $modalInstance.dismiss('cancel');
             }
-            $scope.add = function () {
-                var extra = {
-                    field: 'extra[' + $scope.myExtraColumns + ']',
-                    displayName: '自定义',
-                    visible: false,
-                    enableCellEdit: true
-                }
-                $scope.myColumnDefs.push(extra);
-                $scope.myExtraColumns++;
-            }
         };
-        $scope.confirmFilter = function () {
+        $scope.confirmFilter = function() {
             var url;
-            if($scope.activeGroup.groupId){
+            if ($scope.activeGroup.groupId) {
                 url = '/data/contacts/group/';
                 url += $scope.activeGroup.groupId;
-            }else{
-                url='/data/contacts/tag/';
-                url+=$scope.activeGroup.display;
+            } else {
+                url = '/data/contacts/tag/';
+                url += $scope.activeGroup.display;
             }
             url += '?filter[' + $scope.filter.factor.key + ']=' + $scope.filter.factor.value;
-            $http.get(url).success(function (res) {
+            $http.get(url).success(function(res) {
                 $scope.myData = res.data;
-            }).error(function () {
+            }).error(function() {
 
             });
         };
@@ -514,14 +508,11 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
                 value: ''
             },
             range: [{
+                display: '姓名',
+                key: 'name'
+            },{
                 display: '公司',
                 key: 'company'
-            }, {
-                display: '职位',
-                key: 'position'
-            }, {
-                display: '部门',
-                key: 'department'
             }, {
                 display: '地区',
                 key: 'area'
@@ -548,13 +539,13 @@ controllers.controller('contactsListCtrl', ['$scope', '$http', '$modal', '$windo
 ]);
 
 controllers.controller('detailCtrl', ['$scope', '$http', '$location', 'sbInfo',
-    function ($scope, $http, $location, sbInfo) {
+    function($scope, $http, $location, sbInfo) {
         if (sbInfo.info) {
             $scope.user = {
                 groups: sbInfo.info.contactGroups
             };
         } else {
-            sbInfo.get().success(function (res) {
+            sbInfo.get().success(function(res) {
                 sbInfo.info = res.info;
                 $scope.user = {
                     groups: sbInfo.info.contactGroups
@@ -563,6 +554,10 @@ controllers.controller('detailCtrl', ['$scope', '$http', '$location', 'sbInfo',
         }
         var oldContact, post = {};
         $scope.contactInit = [{
+            display: '国家',
+            value: 'country',
+            multiple: false
+        }, {
             display: '地区',
             value: 'area',
             multiple: false
@@ -602,30 +597,26 @@ controllers.controller('detailCtrl', ['$scope', '$http', '$location', 'sbInfo',
             display: '邮箱',
             value: 'email',
             multiple: false
-        }, {
-            display: 'QQ',
-            value: 'qq',
-            multiple: false
         }];
-        $scope.addNewNote = function () {
+        $scope.addNewNote = function() {
             var post = {
                 newNoteContent: $scope.newNoteContent,
                 belongTo: $location.$$search.id
             }
-            $http.post('/data/notes/insert', post).success(function (res) {
+            $http.post('/data/notes/insert', post).success(function(res) {
                 $scope.contact.notes.unshift(res.note);
                 $scope.newNoteContent = '';
-            }).error(function () {
+            }).error(function() {
 
             });
         }
         var div = $('.left');
         $scope.advance = {
-            plus: function (key, s) {
+            plus: function(key, s) {
                 $scope.contact[key].push('');
                 div.getNiceScroll().resize();
             },
-            minus: function (key, index) {
+            minus: function(key, index) {
                 if ($scope.contact[key].length > 1) {
                     $scope.contact[key].splice(index, 1);
                     div.getNiceScroll().resize();
@@ -634,36 +625,36 @@ controllers.controller('detailCtrl', ['$scope', '$http', '$location', 'sbInfo',
                 }
             }
         };
-        $scope.watchContact = function () {
+        $scope.watchContact = function() {
             oldContact = angular.copy($scope.contact);
             $scope.edit.tip = '请点击保存，完成修改!';
         }
-        $scope.confirmContact = function () {
+        $scope.confirmContact = function() {
             for (var key in $scope.contact) {
                 if (!angular.equals(oldContact[key], $scope.contact[key])) {
                     post[key] = $scope.contact[key];
                 }
             }
             if (!angular.equals(post, {})) {
-                $http.put('/data/contacts/edit/' + $location.$$search.id, post).success(function () {
+                $http.put('/data/contacts/edit/' + $location.$$search.id, post).success(function() {
                     $scope.edit.tip = '修改完成!';
-                    setTimeout(function () {
-                        $scope.$apply(function () {
+                    setTimeout(function() {
+                        $scope.$apply(function() {
                             $scope.edit.tip = '';
                         })
                     }, 1500);
-                }).error(function () {
+                }).error(function() {
 
                 });
             } else {
                 $scope.edit.tip = '';
             }
         }
-        $scope.cancelContact = function () {
+        $scope.cancelContact = function() {
             $scope.contact = oldContact;
             $scope.edit.tip = '修改取消!';
-            setTimeout(function () {
-                $scope.$apply(function () {
+            setTimeout(function() {
+                $scope.$apply(function() {
                     $scope.edit.tip = '';
                 })
             }, 1500);
@@ -671,28 +662,148 @@ controllers.controller('detailCtrl', ['$scope', '$http', '$location', 'sbInfo',
     }
 ]);
 
-controllers.controller('settingsCtrl', ['$scope', '$http', 'sbInfo', '$window',
-    function ($scope, $http, sbInfo, $window) {
+controllers.controller('meetingCtrl', ['$scope',
+    function($scope) {
+
+    }
+]);
+
+controllers.controller('exposCtrl', ['$scope', '$http', '$modal', 'sbInfo',
+    function($scope, $http, $modal, sbInfo) {
+        if (sbInfo.info) {
+            $scope.groups = {
+                total: sbInfo.info.groupStatus.contact.total,
+                ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
+                default: sbInfo.info.tags,
+                custom: sbInfo.info.contactGroups,
+            };
+            $scope.myColumnDefs = sbInfo.info.settings.columnDefs;
+            $scope.myExtraColumns = sbInfo.info.settings.extraColumns;
+        } else {
+            sbInfo.get().success(function(res) {
+                sbInfo.info = res.info;
+                $scope.groups = {
+                    total: sbInfo.info.groupStatus.contact.total,
+                    ungrouped: sbInfo.info.groupStatus.contact.ungrouped,
+                    default: sbInfo.info.tags,
+                    custom: sbInfo.info.contactGroups,
+                };
+                $scope.myColumnDefs = sbInfo.info.settings.columnDefs;
+                $scope.myExtraColumns = sbInfo.info.settings.extraColumns;
+            });
+        }
+        $http.get('/data/contacts/recommonder?type=1').success(function(res) {
+            $scope.myData = res.data;
+        }).error(function() {
+
+        });
+        $scope.openCustomModal = function(size) {
+            var modalInstance = $modal.open({
+                templateUrl: '/jade/customModal',
+                controller: ModalInstanceCtrl,
+                size: size,
+                resolve: {
+                    transfer: function() {
+                        return {
+                            myColumnDefs: $scope.myColumnDefs,
+                            myExtraColumns: $scope.myExtraColumns
+                        };
+                    }
+                }
+            });
+            modalInstance.result.then(function(columns) {
+                $scope.myColumnDefs = columns;
+            }, function() {
+
+            });
+        };
+        var ModalInstanceCtrl = function($scope, $modalInstance, transfer) {
+            $scope.myColumnDefs = angular.copy(transfer.myColumnDefs);
+            $scope.myExtraColumns = angular.copy(transfer.myExtraColumns);
+            $scope.ok = function() {
+                var post = {
+                    update: {
+                        settings: {
+                            columnDefs: $scope.myColumnDefs,
+                            extraColumns: $scope.myExtraColumns
+                        }
+                    }
+                }
+                $http.put('/data/users/edit/self', post).success(function() {
+                    $modalInstance.close($scope.myColumnDefs);
+                });
+            }
+            $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+            }
+            $scope.add = function() {
+                var extra = {
+                    field: 'extra[' + $scope.myExtraColumns + ']',
+                    displayName: '自定义',
+                    visible: false,
+                    enableCellEdit: true
+                }
+                $scope.myColumnDefs.push(extra);
+                $scope.myExtraColumns++;
+            }
+        };
+        $scope.changeGroup = function(type) {
+            if (type == 1) {
+                $scope.activeModules = {
+                    display: "观众（行业关注度很高）"
+                }
+            } else if (type == 2) {
+                $scope.activeModules = {
+                    display: "观众（行业关注度较高）"
+                }
+            }
+            $http.get('/data/contacts/recommonder?type=' + type).success(function(res) {
+                $scope.myData = res.data;
+            }).error(function() {
+
+            });
+        }
+        $scope.activeModules = {
+            display: '观众（行业关注度很高）'
+        }
+        $scope.mySelections = [];
+        $scope.gridOptions = {
+            data: 'myData',
+            selectedItems: $scope.mySelections,
+            enableColumnResize: true,
+            enableHighlighting: true,
+            selectWithCheckboxOnly: true,
+            showSelectionCheckbox: true,
+            enableCellEditOnFocus: true,
+            i18n: 'zh-cn',
+            columnDefs: 'myColumnDefs'
+        };
+    }
+]);
+
+controllers.controller('settingsCtrl', ['$rootScope', '$scope', '$http', 'sbInfo', '$window',
+    function($rootScope, $scope, $http, sbInfo, $window) {
         $scope.changeName = {
             name: sbInfo.info.name,
             display: false,
             status: ''
         };
-        $scope.confirmChangeName = function () {
+        $scope.confirmChangeName = function() {
             var post = {
                 update: {
                     name: $scope.changeName.name
                 }
             };
-            $http.put('/data/users/edit/self', post).success(function () {
+            $http.put('/data/users/edit/self', post).success(function() {
                 $scope.changeName.display = true;
                 $scope.changeName.status = '修改完成';
-                setTimeout(function () {
-                    $scope.$apply(function () {
+                $rootScope.name = $scope.changeName.name;
+                setTimeout(function() {
+                    $scope.$apply(function() {
                         $scope.changeName.display = false;
                     });
                 }, 1000);
-            }).error(function () {
+            }).error(function() {
                 $scope.changeName.display = true;
                 $scope.changeName.status = '修改失败';
             });
@@ -701,7 +812,7 @@ controllers.controller('settingsCtrl', ['$scope', '$http', 'sbInfo', '$window',
             newPwd: '',
             reNewPwd: ''
         };
-        $scope.confirmChangePwd = function () {
+        $scope.confirmChangePwd = function() {
             if ($scope.changePwd.oldPwd.length) {
 
             }
@@ -709,14 +820,14 @@ controllers.controller('settingsCtrl', ['$scope', '$http', 'sbInfo', '$window',
                 oldPwd: $scope.changePwd.oldPwd,
                 newPwd: $scope.changePwd.newPwd
             };
-            $http.put('/data/users/changePwd/self', post).success(function () {
+            $http.put('/data/users/changePwd/self', post).success(function() {
                 $window.location.href = '/';
-            }).error(function () {
+            }).error(function() {
                 $scope.error = 2;
                 $scope.changePwd.status = '修改失败';
             });
         };
-        $scope.checkPwd = function () {
+        $scope.checkPwd = function() {
             if ($scope.changePwd.reNewPwd == $scope.changePwd.newPwd) {
                 $scope.error = 0;
             } else if ($scope.changePwd.reNewPwd == '') {

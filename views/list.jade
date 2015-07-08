@@ -1,0 +1,44 @@
+doctype html
+html(ng-app='list' id='ng-app' ng-cloak)
+    head
+        meta(http-equiv='content-type' content='text/html; charset=UTF-8')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge;chrome=1')
+        meta(name='keywords' content='科技,NFC,联云,斯墨,信息')
+        meta(name='description' content='领先的会展信息服务')
+        meta(name='author' content='synorme,上海斯墨信息科技有限公司')
+        title 联云
+        link(rel='shortcut icon' href='/img/favicon.ico')
+        link(rel='stylesheet' type='text/css' href='/css/bootstrap.min.css')
+        link(rel='stylesheet' type='text/css' href='/css/metro.css')
+        link(rel='stylesheet' type='text/css' href='/css/list.css')
+        script(src='/lib/jquery.min.js')
+        script(src='/lib/angular-1.2.7.js')
+        script(src='/js/list.js')
+    body(ng-controller="listCtrl")
+        .container
+            .row
+                .col-md-12.bhoechie-tab-container
+                    .row
+                        .col-md-3.bhoechie-tab-menu
+                            .list-group
+                                a.list-group-item.text-center(href='#' ng-repeat='item in tabs' ng-class='{active:item.id==$parent.activeTab}' ng-click='$parent.activeTab=item.id')
+                                    h3.icon-user-4
+                                    | {{item.display}}
+                        .col-md-9.bhoechie-tab.active
+                            ul.list-unstyled
+                                li.col-md-4(ng-repeat='item in results[activeTab]')
+                                    .panel.panel-primary
+                                        .panel-heading
+                                            h3.panel-title
+                                                span
+                                                | {{item.name}}
+                                        .panel-body
+                                            strong {{item.contact}}
+                                            dl
+                                                dt 到访时间:
+                                                dd {{item.time}}
+                                                br
+                                                dt 手机:
+                                                dd {{item.mobile}}
+                                            div
+                                                .btn.btn-sm.btn-info(ng-repeat='btn in item.tags') {{btn}}

@@ -39,13 +39,13 @@ html(ng-app='smartBadge' id='ng-app' ng-cloak)
             .container-fluid
                 .navbar-header
                     a.navbar-brand(href='/')
-                        span smartBadge
+                        span SmartBadge
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
-                        li
+                        li.active.fixed
                             a(href='/contacts') 联系人
-                        li
-                            a(href='/expo') 展会
+                        //- li(ng-class="{active:activePanel==1}")
+                        //-     a(href='/expos') 展会
                     ul.nav.navbar-nav.pull-right
                         li.dropdown(dropdown)
                             a.dropdown-toggle(href='#' dropdown-toggle)
@@ -64,6 +64,9 @@ html(ng-app='smartBadge' id='ng-app' ng-cloak)
                     li
                         a(href='/contacts/add' tooltip-placement='right' tooltip='新增联系人')
                             span.glyphicon.glyphicon-list-alt
+                    li
+                        a(href='#' tooltip-placement='right' tooltip='下载联系人' ng-click='downloadList()')
+                            span.glyphicon.glyphicon-download
                     li
                         a(href='/contacts/upload' tooltip-placement='right' tooltip='导入联系人')
                             span.glyphicon.glyphicon-upload

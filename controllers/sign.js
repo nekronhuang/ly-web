@@ -7,8 +7,8 @@ var crypto = require('crypto'),
 
 exports.signup = function (req, res) {
     var md5 = crypto.createHash('md5'),
-        singleTemplate='<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>',
-        multiTemplate='<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}" target="_blank"><span ng-cell-text>{{row.getProperty(col.field).join("/")}}</span></a></div>',
+        singleTemplate='<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}"><span ng-cell-text>{{row.getProperty(col.field)}}</span></a></div>',
+        multiTemplate='<div class="ngCellText comment" ng-class="col.colIndex()"><a href="/contacts/detail?id={{row.entity._id}}"><span ng-cell-text>{{row.getProperty(col.field).join("/")}}</span></a></div>',
         newUser = {
             name:'',
             email: req.body.email,
@@ -20,23 +20,17 @@ exports.signup = function (req, res) {
             contactGroups: [],
             settings: {
                 columnDefs: [{
+                    field: 'time',
+                    displayName: '来访时间',
+                    visible: true,
+                    enableCellEdit:false,
+                    cellTemplate: singleTemplate
+                }, {
                     field: 'name',
                     displayName: '姓名',
                     visible: true,
                     enableCellEdit:false,
                     cellTemplate: singleTemplate
-                }, {
-                    field: 'gender',
-                    displayName: '性别',
-                    visible: false,
-                    enableCellEdit:false,
-                    cellTemplate: singleTemplate
-                }, {
-                    field: 'field',
-                    displayName: '行业',
-                    visible: false,
-                    enableCellEdit:false,
-                    cellTemplate: multiTemplate
                 }, {
                     field: 'mobile',
                     displayName: '手机',
@@ -49,15 +43,21 @@ exports.signup = function (req, res) {
                     visible: false,
                     enableCellEdit:false,
                     cellTemplate: multiTemplate
-                }, {
-                    field: 'area',
-                    displayName: '地区',
+                },{
+                    field: 'email',
+                    displayName: '邮箱',
                     visible: true,
                     enableCellEdit:false,
                     cellTemplate: singleTemplate
                 }, {
-                    field: 'department',
-                    displayName: '部门',
+                    field: 'country',
+                    displayName: '国家',
+                    visible: false,
+                    enableCellEdit:false,
+                    cellTemplate: singleTemplate
+                }, {
+                    field: 'area',
+                    displayName: '地区',
                     visible: false,
                     enableCellEdit:false,
                     cellTemplate: singleTemplate
@@ -120,46 +120,17 @@ exports.signup = function (req, res) {
         }
     ], function (err, user) {
         if (err) {
-            res.send(500);
+            console.log(err);
+            res.sendStatus(500);
             return;
         }
         if (user) {
-            var mailOptions = {
-                template: 'active.jade',
-                locals: {}
-            };
-            mail.sendActiveMail(newUser.email, mailOptions, function (err) {
-                if (err) {
-                    res.send(500);
-                } else {
-                    if(req.headers.accept){
-                        res.json({
-                            'm': '注册成功，请至邮箱激活，网页将在1秒后自动跳转！',
-                            'app': 's'
-                        });
-                    }else{
-                        var signature = require('cookie-signature'),
-                            val = req.sessionID,
-                            secret = config.mongo.secret;
-                        var signed = 's:' + signature.sign(val, secret);
-                        req.session.user = {
-                            _id: user._id,
-                            email: user.email,
-                            active: user.active
-                        };
-                        req.session.cookie.maxAge = 3600 * 1000 * 24 * 365 * 10;
-                        res.json({
-                            'user':{
-                                _id:user._id.toString(),
-                                email:user.email
-                            },
-                            'cookie':encodeURIComponent(signed),
-                            'm': '注册成功，请至邮箱激活，网页将在1秒后自动跳转！',
-                            'app': 's'
-                        });
-                    }
-                }
-            });
+            if(req.headers.accept){
+                res.json({
+                    'm': '注册成功，请至邮箱激活，网页将在1秒后自动跳转！',
+                    'app': 's'
+                });
+            }
         } else {
             res.json({
                 'm': '该用户已存在！',
@@ -170,25 +141,27 @@ exports.signup = function (req, res) {
 }
 
 exports.login = function (req, res) {
+    console.log(req.body.password);
     var md5 = crypto.createHash('md5'),
         password = md5.update(req.body.password).digest('hex');
     userProxy.getUserByEmail(req.body.email, function (err, user) {
         if (err) {
-            res.send(500);
+            res.sendStatus(500);
         } else {
+            console.log(user.password,password);
             if (!user || user.password != password) {
-                res.send(200);
+                res.redirect('/');
             } else {
                 if(req.headers.accept){
-                    if (req.body.autosign) {
-                        req.session.cookie.maxAge = 3600 * 1000 * 24 * 7;
-                    }
+                    console.log(1);
+                    req.session.cookie.maxAge = 3600 * 1000 * 24 * 7;
                     req.session.user = {
                         _id: user._id,
                         email: user.email,
+                        name:user.name,
                         active: user.active
                     };
-                    res.redirect('/contacts');
+                    res.redirect('/');
                 }else{
                     var signature = require('cookie-signature'),
                         val = req.sessionID,
@@ -230,12 +203,12 @@ exports.active = function (req, res) {
             active: true
         }, function (err, results) {
             if (err) {
-                res.send(500);
+                res.sendStatus(500);
             } else {
-                res.send(200);
+                res.sendStatus(200);
             }
         });
     } else {
-        res.send('请检查链接是否复制完整！');
+        res.sendStatus('请检查链接是否复制完整！');
     }
 }

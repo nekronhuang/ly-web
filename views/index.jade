@@ -10,30 +10,92 @@ html
         link(rel='shortcut icon' href='/img/favicon.ico')
         link(rel='stylesheet' type='text/css' href='/css/bootstrap.min.css')
         link(rel='stylesheet' type='text/css' href='/css/theme.css')
-    body
-        .container
-            div
-                //- form(name='reg' novalidate method='post' action='app/sign/signup')
-                //-     input(name='email' type='email' placeholder='email' required)
-                //-     input(name='password' type='password' placeholder='password' required)
-                //-     button(type='submit') 注册
-
-                form.form-horizontal(name='login' novalidate method='post' action='app/sign/login' style="margin-top:100px;")
-                    .form-group
-                        label.control-label.col-sm-2 邮箱
-                        .col-sm-4
-                            input.form-control(name='email' type='email' placeholder='email' required)
-                    .form-group
-                        label.control-label.col-sm-2 密码
-                        .col-sm-4
-                            input.form-control(name='password' type='password' placeholder='password' required)
-                    .form-group
-                        .col-sm-offset-2.col-sm-4
-                            button.btn.btn-default(type='submit') 登录
-            //- .margin
-            //-     svg#logo(width='84' height='84' xmlns='http://www.w3.org/2000/svg')
-            //-         path.line(style='stroke-width: 2;stroke: #ddd;fill:none;' d='M 80.889194,41.80541 C 80.889194,63.45198 63.341174,81 41.694594,81 20.048024,81 2.5,63.45198 2.5,41.80541 2.5,20.158827 20.048024,2.61081 41.694594,2.61081 c 21.64658,0 39.1946,17.548017 39.1946,39.1946 z')
-            //-     .hidden(data-svg='logo' style='background:#f00;')
+        style(type='text/css').
+            #loading-wrap{
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            #loading-wrap .content{
+                position: absolute;
+                top:50%;
+                left: 50%;
+                margin-left: -100px;
+                margin-top: -220px;
+            }
+            #loading-wrap .content .brand{
+                width: 140px;
+                height: 140px;
+                background: #fff;
+                margin:0 auto;
+                position: relative;
+                top: -320px;
+                border-radius: 50%;
+                padding: 30px;
+            }
+            #loading-wrap .content .brand img{
+                display: block;
+                width: 80px;
+            }
+            #loading-wrap .content .outer-circle{
+                background-color: rgba(0,0,0,0);
+                border:5px solid rgba(71,157,216,0.9);
+                opacity:.9;
+                border-right:5px solid rgba(0,0,0,0);
+                border-left:5px solid rgba(0,0,0,0);
+                border-radius:50%;
+                box-shadow: 0 0 35px #2187e7;
+                width:180px;
+                height:180px;
+                margin:0 auto;
+                -webkit-animation:spinPulse 1s infinite linear;
+            }
+            #loading-wrap .content .inner-circle{
+                background-color: rgba(0,0,0,0);
+                border:5px solid rgba(71,157,216,0.9);
+                opacity:.9;
+                border-left:5px solid rgba(0,0,0,0);
+                border-right:5px solid rgba(0,0,0,0);
+                border-radius:50%;
+                box-shadow: 0 0 15px #2187e7;
+                width:160px;
+                height:160px;
+                margin:0 auto;
+                position:relative;
+                top:-170px;
+                -webkit-animation:spinoffPulse 1s infinite linear;
+            }
+            @-webkit-keyframes spinPulse {
+                0% { -webkit-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7; }
+                50% { -webkit-transform:rotate(145deg); opacity:1;}
+                100% { -webkit-transform:rotate(-320deg); opacity:0; }
+            }
+            @-webkit-keyframes spinoffPulse {
+                0% { -webkit-transform:rotate(0deg); }
+                100% { -webkit-transform:rotate(360deg); }
+            }
+    body(style='background:url(/img/login.jpg) no-repeat 50% 20%;')
+        form(name='reg' novalidate method='post' action='app/sign/signup')
+            input(name='email' type='email' placeholder='email' required)
+            input(name='password' type='password' placeholder='password' required)
+            button(type='submit') 注册
+        #loading-wrap
+            .content
+                .outer-circle
+                .inner-circle
+                .brand
+                    img(src='/img/brand.png')
+        div(style='width:450px;background:rgba(255,255,255,.6);border:1px solid #ddd;font-size:16px;border-radius:5px;box-shadow: 1px 1px 7px #ccc;position:absolute;top:50%;left:50%;margin-left:-225px;margin-top:0px;')
+            form(name='login' novalidate method='post' action='app/sign/login')
+                h3(style='text-align:center;padding: 20px 30px 20px 30px;background-color:rgba(17,17,17,0.5);color: #fff;font-size: 20px;border-bottom: 1px solid #ddd;margin:0 auto 20px;border-radius:5px 5px 0 0;') TCT ASIA 2015
+                div
+                    input(style='outline:none;border: solid 1px #E5E5E5;margin: 5px 30px 0px 30px;padding: 9px;display: block;font-size: 16px;width: 390px;background: -webkit-gradient( linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF) );background: -moz-linear-gradient( top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px );box-shadow: 0px 0px 8px #f0f0f0;' name='email' type='email' placeholder='账号' required)
+                div
+                    input(style='outline:none;border: solid 1px #E5E5E5;margin: 5px 30px 0px 30px;padding: 9px;display: block;font-size: 16px;width: 390px;background: -webkit-gradient( linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF) );background: -moz-linear-gradient( top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px );box-shadow: 0px 0px 8px #f0f0f0;' name='password' type='password' placeholder='密码' required)
+                button(style='outline:none;color:#fff;font-size: 18px;margin: 20px auto;display: block;line-height: 1;padding: 0.8em 1em;border-radius: 0.4em;width: 200px;text-align: center;border: 1px solid hsl(204, 65%, 50%);background-color: #479dd8;background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));' type='submit') 登陆
+                p.text-center.text-muted 如需帮助，请邮件service@synorme.com
+                    //- div(style='clear:both;')
         script(src='/lib/shim.min.js')
         script(src='/lib/jquery.min.js')
         script(src='/js/transition.js')
